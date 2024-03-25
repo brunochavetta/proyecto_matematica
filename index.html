@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conjuntos</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/10.4.1/math.min.js"></script>
+    <script src="conjuntos.js"></script>
+</head>
+<body>
+
+    <h2>Conjuntos</h2>
+    <form action="" class="form" id="formRelaciones">
+
+        <h4>Ingresar con el formato x, x, x, x (cada número separado por una coma y un espacio)</h4>
+
+        <label for="conjunto1">Conjunto A:</label>
+        <input type="text" name="conjunto1" id="conjunto1" placeholder="Ingrese los números del conjunto 1"> <br>
+
+        <label for="conjunto2">Conjunto B:</label>
+        <input type="text" name="conjunto2" id="conjunto2" placeholder="Ingrese los números del conjunto 2"> <br>
+        <button type="button" onclick="subconjuntos()">Subconjunto</button> <br>
+        <button type="button" onclick="conjuntoPotencia()">Conjunto potencia</button> <br>
+        <button type="button" onclick="union()">Union</button> <br>
+        <button type="button" onclick="interseccion()">Interseccion</button> <br>
+        <button type="button" onclick="difSimetrica()">Diferencia simétrica</button> <br>
+        <button type="button" onclick="diferencia()">Diferencia</button> <br>
+        <button type="button" onclick="paresOrdenados()">Pares ordenados</button> <br>
+        <button type="button" onclick="averiguarCantParticiones()">Calcular particiones</button> <br>
+        <label for="condicion">Condición:</label>
+        <input type="text" name="condicion" id="condicion" placeholder="Ingrese la condición usando las letras x - y">
+        <button onclick="relaciones()">Evaluar Relaciones</button> <br>
+        <label for="relacion">Si ya tiene la relación ingresela aquí:</label>
+        <input type="text" name="relacion" id="relacionUsuarioID" placeholder="Ingrese la relación con el formato '(num, num), (num, num)...'">
+        <button onclick="relacionUsuario()">Enviar relación</button> <br>
+    </form>
+    <div id="subconjuntosC"></div>
+    <div id="conjuntosPotencia"></div>
+    <div id="unionConjuntos"></div>
+    <div id="interseccionConjuntos"></div>
+    <canvas id="vennCanvas" width="400" height="300"></canvas>
+    <div id="diferenciaConjuntos"></div>
+    <div id="difSimetricaConjunto"></div>
+    <div id="paresOrdenadosConjunto"></div>
+    <div id="calculo"></div>
+    <div id="contenedorRelacionUsuario"></div>
+    <div id="contenedorRelacion"></div>
+    <canvas id="matrizConjuntos" width="400" height="300"></canvas>
+
+</body>
+</html>
