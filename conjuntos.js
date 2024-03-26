@@ -5,7 +5,7 @@
 5 7 10 15 
 */
 
-var sonParesOrdenados = false; 
+var sonParesOrdenados = false;
 
 function mostrarMensajeError(mensaje) {
     let divError = document.createElement("div");
@@ -15,12 +15,12 @@ function mostrarMensajeError(mensaje) {
     setTimeout(() => {
         divError.remove();
     }, 3000);
-}; 
+};
 
 function validarFormatoConjunto(conjunto) {
     let formatoCorrecto = /^\s*((\(-?\d+(\.\d+)?,\s*-?\d+(\.\d+)?\))|-?\d+(\.\d+)?)(\s*,\s*((\(-?\d+(\.\d+)?,\s*-?\d+(\.\d+)?\))|-?\d+(\.\d+)?))*\s*$/;
     return formatoCorrecto.test(conjunto);
-}; 
+};
 
 function obtenerNumerosConjunto(conjunto) {
     if (!validarFormatoConjunto(conjunto)) {
@@ -39,45 +39,47 @@ function obtenerNumerosConjunto(conjunto) {
         sonParesOrdenados = true;
         return pares.length > 0 ? pares : null;
     } else {
-        sonParesOrdenados = false; 
+        sonParesOrdenados = false;
         return conjunto.split(', ').map(Number);
     }
-}; 
+};
 
 
-function limpiarResultado(){
-    document.getElementById("subconjuntosC").style.display = "none"; 
-    document.getElementById("conjuntosPotencia").style.display = "none"; 
-    document.getElementById("unionConjuntos").style.display = "none"; 
-    document.getElementById("interseccionConjuntos").style.display = "none"; 
-    document.getElementById("diferenciaConjuntos").style.display = "none"; 
-    document.getElementById("difSimetricaConjunto").style.display = "none"; 
-    document.getElementById("paresOrdenadosConjunto").style.display = "none"; 
-    document.getElementById("calculo").style.display = "none"; 
-    document.getElementById("contenedorRelacionUsuario").style.display = "none"; 
-    document.getElementById("contenedorRelacion").style.display = "none"; 
-    document.getElementById("vennCanvas").style.display = "none"; 
+function limpiarResultado() {
+    document.getElementById("subconjuntosC").style.display = "none";
+    document.getElementById("conjuntosPotencia").style.display = "none";
+    document.getElementById("unionConjuntos").style.display = "none";
+    document.getElementById("interseccionConjuntos").style.display = "none";
+    document.getElementById("diferenciaConjuntos").style.display = "none";
+    document.getElementById("difSimetricaConjunto").style.display = "none";
+    document.getElementById("paresOrdenadosConjunto").style.display = "none";
+    document.getElementById("calculo").style.display = "none";
+    document.getElementById("contenedorRelacionUsuario").style.display = "none";
+    document.getElementById("contenedorRelacion").style.display = "none";
+    document.getElementById("vennCanvas").style.display = "none";
     document.getElementById("matrizConjuntos").style.display = "none";
 
     let resultadoDiv = document.getElementById("resultado");
 
     let buttons = resultadoDiv.getElementsByTagName("button");
-    for (let i = 0; i < buttons.length; i++) {
-        buttons[i].parentNode.removeChild(buttons[i]); 
+    for (let i = buttons.length - 1; i >= 0; i--) {
+        buttons[i].parentNode.removeChild(buttons[i]);
     }
+
 
     let h5Elements = resultadoDiv.getElementsByTagName("h5");
-    for (let i = 0; i < h5Elements.length; i++) {
-        h5Elements[i].parentNode.removeChild(h5Elements[i]); 
+    for (let i = h5Elements.length - 1; i >= 0; i--) {
+        h5Elements[i].parentNode.removeChild(h5Elements[i]);
     }
 
-    mostrarBotonFlotante(); 
+
+    mostrarBotonFlotante();
 }
 
 function mostrarBotonFlotante() {
     const botonFlotante = document.getElementById('botonFlotante');
     botonFlotante.style.display = 'block';
-    botonFlotante.addEventListener('click', function() {
+    botonFlotante.addEventListener('click', function () {
         const resultado7 = document.getElementById('resultado');
         resultado7.scrollIntoView({ behavior: 'smooth' });
     });
@@ -89,76 +91,76 @@ function averiguarCantParticiones() {
 
     let numConjunto1 = obtenerNumerosConjunto(conjunto1);
 
-    if(sonParesOrdenados){
+    if (sonParesOrdenados) {
         alert("No disponible con pares ordenados");
         return
     }
-    
-    let cantidad = numConjunto1.length; 
+
+    let cantidad = numConjunto1.length;
 
     const particiones = new Array(cantidad + 1);
 
     for (let i = 0; i <= cantidad; i++) {
-        particiones[i] = new Array(i + 1).fill(0); 
+        particiones[i] = new Array(i + 1).fill(0);
     }
 
-    particiones[0][0] = 1; 
+    particiones[0][0] = 1;
 
     if (cantidad > 0) {
         for (let i = 1; i <= cantidad; i++) {
             for (let j = 0; j < particiones[i].length; j++) {
                 switch (j) {
                     case 0:
-                        particiones[i][j] = particiones[i - 1][particiones[i - 1].length - 1]; 
-                        break; 
-                    case 1: 
+                        particiones[i][j] = particiones[i - 1][particiones[i - 1].length - 1];
+                        break;
+                    case 1:
                         particiones[i][j] = particiones[i - 1][j - 1] + particiones[i][j - 1];
                         break;
-                    default: 
-                        particiones[i][j] = particiones[i - 1][j - 1] + particiones[i][j - 1]; 
-                        break; 
+                    default:
+                        particiones[i][j] = particiones[i - 1][j - 1] + particiones[i][j - 1];
+                        break;
                 }
             }
         }
     }
-        
-    let div = document.getElementById("calculo"); 
+
+    let div = document.getElementById("calculo");
     div.style.display = "block";
-    let texto = ""; 
+    let texto = "";
 
     if (cantidad === 1) {
-        texto += particiones[0][0] + "<br>"; 
-        texto += particiones[1][0] + " " + particiones[1][1] + "<br>"; 
+        texto += particiones[0][0] + "<br>";
+        texto += particiones[1][0] + " " + particiones[1][1] + "<br>";
     } else {
         for (let i = 0; i <= cantidad; i++) {
             for (let j = 0; j <= i; j++) {
                 texto += particiones[i][j] + " ";
             }
-            texto += "<br>"; 
+            texto += "<br>";
         }
     }
 
 
-    let part = particiones[cantidad][0]; 
+    let part = particiones[cantidad][0];
     let conjuntoParticiones = calcularParticiones(numConjunto1)
 
-    div.innerHTML = texto; 
+    div.innerHTML = texto;
 
-    let h5 = document.createElement("h5"); 
-    let h5Particion = document.createElement("h5"); 
-    let h5Cantidad = document.createElement("h5"); 
+    let h5 = document.createElement("h5");
+    let h5Particion = document.createElement("h5");
+    let h5Cantidad = document.createElement("h5");
 
-    h5.textContent = `Triángulo de Pierce: para ${cantidad} elementos se pueden crear hasta ${part} particiones`; 
-    if(conjuntoParticiones.length == 1){
-        h5Cantidad.textContent = `Se creó ${conjuntoParticiones.length} partición`; 
-    }else{
-        h5Cantidad.textContent = `Se crearon ${conjuntoParticiones.length} particiones`; 
+    h5.textContent = `Triángulo de Pierce: para ${cantidad} elementos se pueden crear hasta ${part} particiones`;
+    if (conjuntoParticiones.length == 1) {
+        h5Cantidad.textContent = `Se creó ${conjuntoParticiones.length} partición`;
+    } else {
+        h5Cantidad.textContent = `Se crearon ${conjuntoParticiones.length} particiones`;
     }
     h5Particion.textContent = `Particiones del conjunto: { ${conjuntoParticiones.map(particion => `{ ${particion.join(", ")} }`).join(", ")} }`;
 
     div.appendChild(h5);
-    div.appendChild(h5Cantidad); 
-    div.appendChild(h5Particion); 
+    div.appendChild(h5Cantidad);
+    div.appendChild(h5Particion);
 }
 
 function calcularParticiones(numConjunto1) {
@@ -170,16 +172,16 @@ function calcularParticiones(numConjunto1) {
         const particion = [];
         const particionSize = Math.floor(Math.random() * elementosDisponibles.length) + 1;
 
-        if (particionSize > 0) { 
+        if (particionSize > 0) {
             for (let j = 0; j < particionSize; j++) {
                 const indice = Math.floor(Math.random() * elementosDisponibles.length);
                 const elemento = elementosDisponibles.splice(indice, 1)[0];
-                if(elemento != undefined){
+                if (elemento != undefined) {
                     particion.push(elemento);
                 }
             }
 
-            if(particion.length > 0){
+            if (particion.length > 0) {
                 conjuntoParticiones.push(particion);
             }
         }
@@ -194,7 +196,7 @@ function calcularParticiones(numConjunto1) {
 
 
 
-function subconjuntos(){
+function subconjuntos() {
     limpiarResultado()
     let conjunto1 = document.getElementById("conjunto1").value;
     let conjunto2 = document.getElementById("conjunto2").value;
@@ -202,34 +204,34 @@ function subconjuntos(){
     let numConjunto1 = obtenerNumerosConjunto(conjunto1);
     let numConjunto2 = obtenerNumerosConjunto(conjunto2);
 
-    let subA = true; 
-    let subB = true; 
+    let subA = true;
+    let subB = true;
 
-    for(let i = 0; i < numConjunto1.length; i++){
-        if(!numConjunto1.includes(numConjunto2[i])){
-            subA = false; 
-        }
-    }
-    
-    for(let i = 0; i < numConjunto2.length; i++){
-        if(!numConjunto2.includes(numConjunto1[i])){
-            subB = false; 
+    for (let i = 0; i < numConjunto1.length; i++) {
+        if (!numConjunto1.includes(numConjunto2[i])) {
+            subA = false;
         }
     }
 
-    let subconjuntosC = document.getElementById("subconjuntosC"); 
+    for (let i = 0; i < numConjunto2.length; i++) {
+        if (!numConjunto2.includes(numConjunto1[i])) {
+            subB = false;
+        }
+    }
+
+    let subconjuntosC = document.getElementById("subconjuntosC");
     subconjuntosC.style.display = "block";
-    let h5A = document.createElement("h5"); 
-    let h5B = document.createElement("h5"); 
+    let h5A = document.createElement("h5");
+    let h5B = document.createElement("h5");
 
-    h5A.textContent = `¿A es subconjunto de B? ${subA}`; 
-    h5B.textContent = `¿B es subconjunto de A? ${subB}`; 
+    h5A.textContent = `¿A es subconjunto de B? ${subA}`;
+    h5B.textContent = `¿B es subconjunto de A? ${subB}`;
 
-    subconjuntosC.appendChild(h5A); 
-    subconjuntosC.appendChild(h5B);  
+    subconjuntosC.appendChild(h5A);
+    subconjuntosC.appendChild(h5B);
 }
 
-function conjuntoPotencia(){
+function conjuntoPotencia() {
     limpiarResultado()
     let conjunto1 = document.getElementById("conjunto1").value;
     let conjunto2 = document.getElementById("conjunto2").value;
@@ -237,16 +239,16 @@ function conjuntoPotencia(){
     let numConjunto1 = obtenerNumerosConjunto(conjunto1);
     let numConjunto2 = obtenerNumerosConjunto(conjunto2);
 
-    if(sonParesOrdenados){
+    if (sonParesOrdenados) {
         alert("No disponible con pares ordenados");
         return
     }
 
-    let potenciaCA = [[]]; 
-    let potenciaCB = [[]]; 
+    let potenciaCA = [[]];
+    let potenciaCB = [[]];
 
     let potenciaA = 2 ** numConjunto1.length;
-    let potenciaB = 2 ** numConjunto2.length; 
+    let potenciaB = 2 ** numConjunto2.length;
 
     for (let elemento of numConjunto1) {
         let nuevosSubconjuntos = [];
@@ -263,22 +265,22 @@ function conjuntoPotencia(){
         }
         potenciaCB = potenciaCB.concat(nuevosSubconjuntos);
     }
-    
+
     let conjuntosPotencia = document.getElementById("conjuntosPotencia");
     conjuntosPotencia.style.display = "block";
 
-    let h5A = document.createElement("h5"); 
-    let h5B = document.createElement("h5"); 
+    let h5A = document.createElement("h5");
+    let h5B = document.createElement("h5");
     let potenciaStringA = potenciaCA.map(subconjuntoA => `{${subconjuntoA.join(", ")}}`).join(", ");
     let potenciaStringB = potenciaCB.map(subconjuntoB => `{${subconjuntoB.join(", ")}}`).join(", ");
     h5A.textContent = `Conjunto potencia (${potenciaA} subconjuntos) para A: ${potenciaStringA}`;
     h5B.textContent = `Conjunto potencia (${potenciaB} subconjuntos) para B: ${potenciaStringB}`;
 
     conjuntosPotencia.appendChild(h5A);
-    conjuntosPotencia.appendChild(h5B); 
+    conjuntosPotencia.appendChild(h5B);
 }
 
-function union(){
+function union() {
     limpiarResultado()
     let conjunto1 = document.getElementById("conjunto1").value;
     let conjunto2 = document.getElementById("conjunto2").value;
@@ -286,49 +288,49 @@ function union(){
     let numConjunto1 = obtenerNumerosConjunto(conjunto1);
     let numConjunto2 = obtenerNumerosConjunto(conjunto2);
 
-    let unionC = []; 
+    let unionC = [];
 
-    if(sonParesOrdenados){
+    if (sonParesOrdenados) {
         unionC = numConjunto1.map(elemento => {
             return `(${elemento[0]}, ${elemento[1]})`;
         });
         let unionC2 = numConjunto2.map(elemento => {
             return `(${elemento[0]}, ${elemento[1]})`;
         });
-        for(let i = 0; i < unionC2.length; i++){
+        for (let i = 0; i < unionC2.length; i++) {
             if (!unionC.includes(unionC2[i])) {
                 unionC.push(unionC2[i]);
             }
         }
-    }else{
-        unionC = numConjunto1.slice(); 
-        for(let i = 0; i < numConjunto2.length; i++){
+    } else {
+        unionC = numConjunto1.slice();
+        for (let i = 0; i < numConjunto2.length; i++) {
             if (!unionC.includes(numConjunto2[i])) {
                 unionC.push(numConjunto2[i]);
             }
         }
     }
 
-    let unionConjunto = document.getElementById("unionConjuntos"); 
+    let unionConjunto = document.getElementById("unionConjuntos");
     unionConjunto.style.display = "block";
 
-    let h5 = document.createElement("h5"); 
-    h5.textContent = `La unión de los conjuntos es: ${unionC.join(", ")}`; 
+    let h5 = document.createElement("h5");
+    h5.textContent = `La unión de los conjuntos es: ${unionC.join(", ")}`;
 
-    unionConjunto.appendChild(h5); 
+    unionConjunto.appendChild(h5);
 }
 
 
 
-function interseccion(){
+function interseccion() {
     limpiarResultado()
     let conjunto1 = document.getElementById("conjunto1").value;
     let conjunto2 = document.getElementById("conjunto2").value;
-    
+
     let numConjunto1 = obtenerNumerosConjunto(conjunto1);
     let numConjunto2 = obtenerNumerosConjunto(conjunto2);
 
-    let interseccionC = []; 
+    let interseccionC = [];
 
     if (sonParesOrdenados) {
         for (let i = 0; i < numConjunto1.length; i++) {
@@ -346,72 +348,72 @@ function interseccion(){
         }
     }
 
-    if(interseccionC.length === 0){
-        interseccionC.push("∅"); 
+    if (interseccionC.length === 0) {
+        interseccionC.push("∅");
     }
 
 
     let interseccionConjunto = document.getElementById("interseccionConjuntos");
-    interseccionConjunto.style.display = "block"; 
+    interseccionConjunto.style.display = "block";
 
     let boton = document.createElement("button");
     boton.textContent = "Ver Diagrama de Venn";
-    boton.className = "btn btn-warning"; 
+    boton.className = "btn btn-warning";
 
-    boton.onclick = function(){
+    boton.onclick = function () {
         diagramaDeVenn(numConjunto1, numConjunto2, interseccionC);
     }
 
-    let h5 = document.createElement("h5"); 
-    h5.textContent = `La intersección de los conjuntos es: ${interseccionC.join(", ")}`; 
-    interseccionConjunto.appendChild(h5); 
+    let h5 = document.createElement("h5");
+    h5.textContent = `La intersección de los conjuntos es: ${interseccionC.join(", ")}`;
+    interseccionConjunto.appendChild(h5);
     interseccionConjunto.appendChild(boton)
 }
 
-function diferencia(){
+function diferencia() {
     limpiarResultado()
     let conjunto1 = document.getElementById("conjunto1").value;
     let conjunto2 = document.getElementById("conjunto2").value;
-    
+
     let numConjunto1 = obtenerNumerosConjunto(conjunto1);
     let numConjunto2 = obtenerNumerosConjunto(conjunto2);
 
     let difA = [];
-    let difB = []; 
+    let difB = [];
 
-    if(sonParesOrdenados){
-        let paresA = []; 
+    if (sonParesOrdenados) {
+        let paresA = [];
         let paresB = []
 
-        for(let i = 0; i < numConjunto1.length; i++){
-            paresA.push(`(${numConjunto1[i][0]}, ${numConjunto1[i][1]})`); 
+        for (let i = 0; i < numConjunto1.length; i++) {
+            paresA.push(`(${numConjunto1[i][0]}, ${numConjunto1[i][1]})`);
         }
 
-        for(let j = 0; j < numConjunto2.length; j++){
-            paresB.push(`(${numConjunto2[j][0]}, ${numConjunto2[j][1]})`); 
+        for (let j = 0; j < numConjunto2.length; j++) {
+            paresB.push(`(${numConjunto2[j][0]}, ${numConjunto2[j][1]})`);
         }
-        
+
         difA = difA.concat(paresA.filter(elemento => !paresB.includes(elemento)));
 
         difB = difB.concat(paresB.filter(elemento => !paresA.includes(elemento)));
 
-    }else{
+    } else {
         difA = difA.concat(numConjunto1.filter(elemento => !numConjunto2.includes(elemento)));
 
         difB = difB.concat(numConjunto2.filter(elemento => !numConjunto1.includes(elemento)));
     }
 
-    let diferenciaConjuntos = document.getElementById("diferenciaConjuntos"); 
+    let diferenciaConjuntos = document.getElementById("diferenciaConjuntos");
     diferenciaConjuntos.style.display = "block";
 
-    let h5A = document.createElement("h5"); 
-    let h5B = document.createElement("h5"); 
-    h5A.textContent = `La diferencia de A - B es: ${difA.join(", ")}`; 
-    h5B.textContent = `La diferencia de B - A es: ${difB.join(", ")}`; 
+    let h5A = document.createElement("h5");
+    let h5B = document.createElement("h5");
+    h5A.textContent = `La diferencia de A - B es: ${difA.join(", ")}`;
+    h5B.textContent = `La diferencia de B - A es: ${difB.join(", ")}`;
 
-    diferenciaConjuntos.appendChild(h5A); 
-    diferenciaConjuntos.appendChild(h5B);  
-} 
+    diferenciaConjuntos.appendChild(h5A);
+    diferenciaConjuntos.appendChild(h5B);
+}
 
 function difSimetrica() {
     limpiarResultado()
@@ -423,53 +425,53 @@ function difSimetrica() {
 
     let difSim = [];
 
-    if(sonParesOrdenados){
-        let paresA = []; 
+    if (sonParesOrdenados) {
+        let paresA = [];
         let paresB = []
 
-        for(let i = 0; i < numConjunto1.length; i++){
-            paresA.push(`(${numConjunto1[i][0]}, ${numConjunto1[i][1]})`); 
+        for (let i = 0; i < numConjunto1.length; i++) {
+            paresA.push(`(${numConjunto1[i][0]}, ${numConjunto1[i][1]})`);
         }
 
-        for(let j = 0; j < numConjunto2.length; j++){
-            paresB.push(`(${numConjunto2[j][0]}, ${numConjunto2[j][1]})`); 
+        for (let j = 0; j < numConjunto2.length; j++) {
+            paresB.push(`(${numConjunto2[j][0]}, ${numConjunto2[j][1]})`);
         }
-        
+
         difSim = difSim.concat(paresA.filter(elemento => !paresB.includes(elemento)));
 
         difSim = difSim.concat(paresB.filter(elemento => !paresA.includes(elemento)));
 
-    }else{
+    } else {
         difSim = difSim.concat(numConjunto1.filter(elemento => !numConjunto2.includes(elemento)));
 
         difSim = difSim.concat(numConjunto2.filter(elemento => !numConjunto1.includes(elemento)));
     }
 
-    let difSimetricaConjunto = document.getElementById("difSimetricaConjunto"); 
+    let difSimetricaConjunto = document.getElementById("difSimetricaConjunto");
     difSimetricaConjunto.style.display = "block";
 
-    let h5 = document.createElement("h5"); 
-    h5.textContent = `La diferencia simétrica de los conjuntos es: ${difSim.join(", ")}`; 
+    let h5 = document.createElement("h5");
+    h5.textContent = `La diferencia simétrica de los conjuntos es: ${difSim.join(", ")}`;
 
-    difSimetricaConjunto.appendChild(h5); 
-}; 
+    difSimetricaConjunto.appendChild(h5);
+};
 
 function relacionUsuario() {
     limpiarResultado()
-    let relacionTexto = document.getElementById("relacionUsuarioID").value; 
+    let relacionTexto = document.getElementById("relacionUsuarioID").value;
     let conjunto1 = document.getElementById("conjunto1").value;
     let conjunto2 = document.getElementById("conjunto2").value;
 
     let numConjunto1 = obtenerNumerosConjunto(conjunto1);
     let numConjunto2 = obtenerNumerosConjunto(conjunto2);
 
-    let relacionNumeros = obtenerNumerosConjunto(relacionTexto); 
+    let relacionNumeros = obtenerNumerosConjunto(relacionTexto);
 
-    let relacion = []; 
-    let dominio = []; 
-    let rango = []; 
+    let relacion = [];
+    let dominio = [];
+    let rango = [];
 
-    for(let k = 0; k < relacionNumeros.length; k++){
+    for (let k = 0; k < relacionNumeros.length; k++) {
         relacion.push(`(${relacionNumeros[k][0]}, ${relacionNumeros[k][1]})`);
     }
 
@@ -487,37 +489,37 @@ function relacionUsuario() {
 
     let boton = document.createElement("button");
     boton.textContent = "Ver matriz de relaciones";
-    boton.className = "btn btn-warning"; 
+    boton.className = "btn btn-warning";
 
-    boton.onclick = function(){
+    boton.onclick = function () {
         dibujarMatrizRelacion(numConjunto1, numConjunto2, relacion);
     }
- 
+
 
     let div = document.getElementById("contenedorRelacionUsuario");
     div.style.display = "block";
 
     let conjuntoA = document.createElement("h5");
-    let conjuntoB = document.createElement("h5"); 
-    let h5Rel = document.createElement("h5"); 
-    let h5Dom = document.createElement("h5"); 
-    let h5Ran = document.createElement("h5"); 
-    let h5Tipo = document.createElement("h5"); 
+    let conjuntoB = document.createElement("h5");
+    let h5Rel = document.createElement("h5");
+    let h5Dom = document.createElement("h5");
+    let h5Ran = document.createElement("h5");
+    let h5Tipo = document.createElement("h5");
 
-    conjuntoA.textContent = `Conjunto A = { ${conjunto1} }`; 
-    conjuntoB.textContent = `Conjunto B = { ${conjunto2} }`; 
-    h5Rel.textContent = `La relación es: ${relacion.join(", ")}`; 
-    h5Dom.textContent = `El dominio es: ${dominio.join(", ")}`; 
-    h5Ran.textContent = `El rango es: ${rango.join(", ")}`; 
-    h5Tipo.textContent = `Tipo de relación: ${tipoDeRelacion(relacion)}`; 
+    conjuntoA.textContent = `Conjunto A = { ${conjunto1} }`;
+    conjuntoB.textContent = `Conjunto B = { ${conjunto2} }`;
+    h5Rel.textContent = `La relación es: ${relacion.join(", ")}`;
+    h5Dom.textContent = `El dominio es: ${dominio.join(", ")}`;
+    h5Ran.textContent = `El rango es: ${rango.join(", ")}`;
+    h5Tipo.textContent = `Tipo de relación: ${tipoDeRelacion(relacion)}`;
 
     div.appendChild(conjuntoA);
-    div.appendChild(conjuntoB); 
-    div.appendChild(h5Rel); 
-    div.appendChild(h5Dom); 
-    div.appendChild(h5Ran); 
-    div.appendChild(h5Tipo); 
-    div.appendChild(boton); 
+    div.appendChild(conjuntoB);
+    div.appendChild(h5Rel);
+    div.appendChild(h5Dom);
+    div.appendChild(h5Ran);
+    div.appendChild(h5Tipo);
+    div.appendChild(boton);
 }
 
 
@@ -528,10 +530,10 @@ function relaciones() {
 
     let numConjunto1 = obtenerNumerosConjunto(conjunto1);
     let numConjunto2 = obtenerNumerosConjunto(conjunto2);
-    
-    let dominio = []; 
-    let rango = []; 
-    let relacion = []; 
+
+    let dominio = [];
+    let rango = [];
+    let relacion = [];
 
     for (let i = 0; i < numConjunto1.length; i++) {
         for (let j = 0; j < numConjunto2.length; j++) {
@@ -547,39 +549,39 @@ function relaciones() {
 
     let boton = document.createElement("button");
     boton.textContent = "Ver matriz de relaciones";
-    boton.className = "btn btn-warning"; 
+    boton.className = "btn btn-warning";
 
-    boton.onclick = function(){
+    boton.onclick = function () {
         dibujarMatrizRelacion(numConjunto1, numConjunto2, relacion);
     }
 
     let div = document.getElementById("contenedorRelacion");
     div.style.display = "block";
-    
-    let conjuntoA = document.createElement("h5");
-    let conjuntoB = document.createElement("h5"); 
-    let h5Condicion = document.createElement("h5"); 
-    let h5Rel = document.createElement("h5"); 
-    let h5Dom = document.createElement("h5"); 
-    let h5Ran = document.createElement("h5"); 
-    let h5Tipo = document.createElement("h5"); 
 
-    conjuntoA.textContent = `Conjunto A = { ${conjunto1} }`; 
-    conjuntoB.textContent = `Conjunto B = { ${conjunto2} }`; 
+    let conjuntoA = document.createElement("h5");
+    let conjuntoB = document.createElement("h5");
+    let h5Condicion = document.createElement("h5");
+    let h5Rel = document.createElement("h5");
+    let h5Dom = document.createElement("h5");
+    let h5Ran = document.createElement("h5");
+    let h5Tipo = document.createElement("h5");
+
+    conjuntoA.textContent = `Conjunto A = { ${conjunto1} }`;
+    conjuntoB.textContent = `Conjunto B = { ${conjunto2} }`;
     h5Condicion.textContent = `Condición ingresada: ${document.getElementById("condicion").value}`
-    h5Rel.textContent = `La relación es: ${relacion.join(", ")}`; 
-    h5Dom.textContent = `El dominio es: ${dominio.join(", ")}`; 
-    h5Ran.textContent = `El rango es: ${rango.join(", ")}`; 
-    h5Tipo.textContent = `Tipo de relación: ${tipoDeRelacion(relacion)}`; 
+    h5Rel.textContent = `La relación es: ${relacion.join(", ")}`;
+    h5Dom.textContent = `El dominio es: ${dominio.join(", ")}`;
+    h5Ran.textContent = `El rango es: ${rango.join(", ")}`;
+    h5Tipo.textContent = `Tipo de relación: ${tipoDeRelacion(relacion)}`;
 
     div.appendChild(conjuntoA);
-    div.appendChild(conjuntoB); 
-    div.appendChild(h5Condicion); 
-    div.appendChild(h5Rel); 
-    div.appendChild(h5Dom); 
-    div.appendChild(h5Ran); 
-    div.appendChild(h5Tipo); 
-    div.appendChild(boton); 
+    div.appendChild(conjuntoB);
+    div.appendChild(h5Condicion);
+    div.appendChild(h5Rel);
+    div.appendChild(h5Dom);
+    div.appendChild(h5Ran);
+    div.appendChild(h5Tipo);
+    div.appendChild(boton);
 }
 
 
@@ -591,9 +593,9 @@ function condicionRelaciones(x, y) {
         return math.evaluate(condicion);
     } catch (error) {
         console.error('Error al evaluar la condición:', error);
-        return false; 
+        return false;
     }
-}; 
+};
 
 function tipoDeRelacion(relacion) {
     let reflexiva = true;
@@ -603,7 +605,7 @@ function tipoDeRelacion(relacion) {
     // Reflexividad
     for (let i = 0; i < relacion.length; i++) {
         let [x, y] = relacion[i].substring(1, relacion[i].length - 1).split(',').map(e => e.trim());
-        if (x !== y) { 
+        if (x !== y) {
             let elementoReflexivo = `(${x}, ${x})`;
             if (!relacion.includes(elementoReflexivo)) {
                 reflexiva = false;
@@ -623,7 +625,7 @@ function tipoDeRelacion(relacion) {
     }
 
     // transitividad
-    transitiva = esTransitiva(relacion); 
+    transitiva = esTransitiva(relacion);
 
     // tipo de relación
     if (reflexiva && simetrica && transitiva) {
@@ -669,7 +671,7 @@ function esTransitiva(relacion) {
             }
         }
         if (!transitiva) {
-            return false; 
+            return false;
         }
     }
     return true;
@@ -683,19 +685,19 @@ function paresOrdenados() {
     let numConjunto1 = obtenerNumerosConjunto(conjunto1);
     let numConjunto2 = obtenerNumerosConjunto(conjunto2);
 
-    let paresA = []; 
-    let paresB = []; 
+    let paresA = [];
+    let paresB = [];
 
-    for(let i = 0; i < numConjunto1.length; i++){
-        for(let j = 0; j < numConjunto2.length; j++){
+    for (let i = 0; i < numConjunto1.length; i++) {
+        for (let j = 0; j < numConjunto2.length; j++) {
             let x = numConjunto1[i];
             let y = numConjunto2[j];
             paresA.push(`(${x}, ${y})`);
         }
     }
 
-    for(let i = 0; i < numConjunto2.length; i++){
-        for(let j = 0; j < numConjunto1.length; j++){
+    for (let i = 0; i < numConjunto2.length; i++) {
+        for (let j = 0; j < numConjunto1.length; j++) {
             let x = numConjunto2[i];
             let y = numConjunto1[j];
             paresB.push(`(${x}, ${y})`);
@@ -704,23 +706,23 @@ function paresOrdenados() {
 
     let div = document.getElementById("paresOrdenadosConjunto");
     div.style.display = "block";
-    
-    let h5A = document.createElement("h5"); 
-    let h5B = document.createElement("h5"); 
 
-    h5A.textContent = `Los pares ordenados de AxB son: ${paresA.join(", ")}`; 
-    h5B.textContent = `Los pares ordenados de BxA son: ${paresB.join(", ")}`; 
+    let h5A = document.createElement("h5");
+    let h5B = document.createElement("h5");
 
-    div.appendChild(h5A); 
-    div.appendChild(h5B); 
+    h5A.textContent = `Los pares ordenados de AxB son: ${paresA.join(", ")}`;
+    h5B.textContent = `Los pares ordenados de BxA son: ${paresB.join(", ")}`;
+
+    div.appendChild(h5A);
+    div.appendChild(h5B);
 }
 
 
 function diagramaDeVenn(conjunto1, conjunto2, interseccion) {
     let canvas = document.getElementById("vennCanvas");
-    canvas.style.display = "block"; 
+    canvas.style.display = "block";
     let ctx = canvas.getContext("2d");
-    ctx.clearRect(0, 0, canvas.width, canvas.height); 
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     let colorConjuntoA = "blue";
     let colorConjuntoB = "red";
@@ -730,53 +732,53 @@ function diagramaDeVenn(conjunto1, conjunto2, interseccion) {
 
     // conjunto A
     ctx.beginPath();
-    ctx.arc(200, 200, 80, 0, 2 * Math.PI); 
-    ctx.strokeStyle = colorConjuntoA; 
+    ctx.arc(200, 200, 80, 0, 2 * Math.PI);
+    ctx.strokeStyle = colorConjuntoA;
     ctx.lineWidth = grosorTrazo;
     ctx.stroke();
 
     // conjunto B
     ctx.beginPath();
-    ctx.arc(300, 200, 80, 0, 2 * Math.PI); 
-    ctx.strokeStyle = colorConjuntoB; 
+    ctx.arc(300, 200, 80, 0, 2 * Math.PI);
+    ctx.strokeStyle = colorConjuntoB;
     ctx.lineWidth = grosorTrazo;
     ctx.stroke();
 
     ctx.font = "20px Arial";
     ctx.textAlign = "center";
 
-    
+
     if (interseccion.length > 0 && interseccion[0] !== "∅") {
         interseccion.forEach((valor, index) => {
-            ctx.fillStyle = colorInterseccion; 
-            ctx.fillText(valor, 250, 200 + (index * 20)); 
+            ctx.fillStyle = colorInterseccion;
+            ctx.fillText(valor, 250, 200 + (index * 20));
         });
     } else {
-        ctx.fillText("∅", 250, 200); 
+        ctx.fillText("∅", 250, 200);
     }
 
-    if(conjunto1.filter(elemento => !interseccion.includes(elemento)).length > 0){
+    if (conjunto1.filter(elemento => !interseccion.includes(elemento)).length > 0) {
         conjunto1.forEach((valor, index) => {
             if (!interseccion.includes(valor)) {
-                ctx.fillStyle = colorConjuntoA; 
-                ctx.fillText(valor, 200, 200 + (index * 20)); 
+                ctx.fillStyle = colorConjuntoA;
+                ctx.fillText(valor, 200, 200 + (index * 20));
             }
         });
-    }else{    
-        ctx.fillStyle = colorConjuntoA; 
-        ctx.fillText("∅", 200, 200); 
+    } else {
+        ctx.fillStyle = colorConjuntoA;
+        ctx.fillText("∅", 200, 200);
     }
-     
-    if(conjunto2.filter(elemento => !interseccion.includes(elemento)).length > 0){
+
+    if (conjunto2.filter(elemento => !interseccion.includes(elemento)).length > 0) {
         conjunto2.forEach((valor, index) => {
             if (!interseccion.includes(valor)) {
-                ctx.fillStyle = colorConjuntoB; 
-                ctx.fillText(valor, 300, 200 + (index * 20)); 
+                ctx.fillStyle = colorConjuntoB;
+                ctx.fillText(valor, 300, 200 + (index * 20));
             }
         });
-    }else{    
-        ctx.fillStyle = colorConjuntoB; 
-        ctx.fillText("∅", 300, 200); 
+    } else {
+        ctx.fillStyle = colorConjuntoB;
+        ctx.fillText("∅", 300, 200);
     }
 };
 
@@ -786,9 +788,9 @@ function dibujarMatrizRelacion(conjuntoA, conjuntoB, relacionR) {
     let ctx = canvas.getContext("2d");
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-   
-    let filaHeight = canvas.height / (conjuntoA.length + 2); 
-    let columnaWidth = canvas.width / (conjuntoB.length + 2); 
+
+    let filaHeight = canvas.height / (conjuntoA.length + 2);
+    let columnaWidth = canvas.width / (conjuntoB.length + 2);
     let colorCoincidencia = "red";
     let colorSinCoincidencia = "black";
 
@@ -796,13 +798,13 @@ function dibujarMatrizRelacion(conjuntoA, conjuntoB, relacionR) {
     ctx.font = "12px Arial";
     ctx.textAlign = "center";
     for (let i = 0; i < conjuntoA.length; i++) {
-        let x = columnaWidth / 2; 
-        let y = filaHeight * (i + 2) + filaHeight / 2; 
+        let x = columnaWidth / 2;
+        let y = filaHeight * (i + 2) + filaHeight / 2;
         ctx.fillText(conjuntoA[i], x, y);
     }
     for (let j = 0; j < conjuntoB.length; j++) {
-        let x = columnaWidth * (j + 2) + columnaWidth / 2; 
-        let y = filaHeight / 2; 
+        let x = columnaWidth * (j + 2) + columnaWidth / 2;
+        let y = filaHeight / 2;
         ctx.fillText(conjuntoB[j], x, y);
     }
 
@@ -811,14 +813,14 @@ function dibujarMatrizRelacion(conjuntoA, conjuntoB, relacionR) {
     ctx.fillStyle = "black";
     for (let i = 0; i < conjuntoA.length; i++) {
         for (let j = 0; j < conjuntoB.length; j++) {
-            let relacion = `(${conjuntoA[i]}, ${conjuntoB[j]})`; 
-            let x = columnaWidth * (j + 2) + columnaWidth / 2; 
-            let y = filaHeight * (i + 2) + filaHeight / 2; 
-            if (relacionR.includes(relacion)) { 
-                ctx.fillStyle = colorCoincidencia; 
+            let relacion = `(${conjuntoA[i]}, ${conjuntoB[j]})`;
+            let x = columnaWidth * (j + 2) + columnaWidth / 2;
+            let y = filaHeight * (i + 2) + filaHeight / 2;
+            if (relacionR.includes(relacion)) {
+                ctx.fillStyle = colorCoincidencia;
                 ctx.fillText("1", x, y);
             } else {
-                ctx.fillStyle = colorSinCoincidencia; 
+                ctx.fillStyle = colorSinCoincidencia;
                 ctx.fillText("0", x, y);
             }
         }
