@@ -71,6 +71,16 @@ function limpiarResultado(){
         h5Elements[i].textContent = "";
     }
 
+    mostrarBotonFlotante(); 
+}
+
+function mostrarBotonFlotante() {
+    const botonFlotante = document.getElementById('botonFlotante');
+    botonFlotante.style.display = 'block';
+    botonFlotante.addEventListener('click', function() {
+        const resultado7 = document.getElementById('resultado');
+        resultado7.scrollIntoView({ behavior: 'smooth' });
+    });
 }
 
 function averiguarCantParticiones() {
