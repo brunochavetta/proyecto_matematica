@@ -63,12 +63,12 @@ function limpiarResultado(){
 
     let buttons = resultadoDiv.getElementsByTagName("button");
     for (let i = 0; i < buttons.length; i++) {
-        buttons[i].textContent = "";
+        buttons[i].parentNode.removeChild(buttons[i]); 
     }
 
     let h5Elements = resultadoDiv.getElementsByTagName("h5");
     for (let i = 0; i < h5Elements.length; i++) {
-        h5Elements[i].textContent = "";
+        h5Elements[i].parentNode.removeChild(h5Elements[i]); 
     }
 
     mostrarBotonFlotante(); 
@@ -622,20 +622,8 @@ function tipoDeRelacion(relacion) {
         }
     }
 
-    // Transitividad
-    for (let i = 0; i < relacion.length; i++) {
-        let [x1, y1] = relacion[i].substring(1, relacion[i].length - 1).split(',').map(e => e.trim());
-        for (let j = 0; j < relacion.length; j++) {
-            let [x2, y2] = relacion[j].substring(1, relacion[j].length - 1).split(',').map(e => e.trim());
-            if (y1 === x2) {
-                let intermedio = `(${x1}, ${y2})`;
-                if (!relacion.includes(intermedio)) {
-                    transitiva = false;
-                    break;
-                }
-            }
-        }
-    }
+    // transitividad
+    transitiva = esTransitiva(relacion); 
 
     // tipo de relación
     if (reflexiva && simetrica && transitiva) {
@@ -658,7 +646,34 @@ function tipoDeRelacion(relacion) {
 }
 
 
+function esTransitiva(relacion) {
+    let paresPosibles = new Set();
+    for (let i = 0; i < relacion.length; i++) {
+        let [x1, y1] = relacion[i].substring(1, relacion[i].length - 1).split(',').map(e => e.trim());
+        for (let j = 0; j < relacion.length; j++) {
+            let [x2, y2] = relacion[j].substring(1, relacion[j].length - 1).split(',').map(e => e.trim());
+            paresPosibles.add(`(${x1}, ${y2})`);
+        }
+    }
 
+    for (let par of paresPosibles) {
+        let [x, z] = par.substring(1, par.length - 1).split(',').map(e => e.trim());
+        let transitiva = false;
+        for (let i = 0; i < relacion.length; i++) {
+            let [x1, y1] = relacion[i].substring(1, relacion[i].length - 1).split(',').map(e => e.trim());
+            if (x === x1) {
+                if (z === y1) {
+                    transitiva = true;
+                    break;
+                }
+            }
+        }
+        if (!transitiva) {
+            return false; 
+        }
+    }
+    return true;
+}
 
 function paresOrdenados() {
     limpiarResultado()
