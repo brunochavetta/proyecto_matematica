@@ -16,12 +16,11 @@ document.getElementById("flexSwitchCheckChecked").addEventListener("change", fun
     }
 });
 
-
 document.addEventListener('keydown', function (event) {
     const keyCode = event.keyCode;
 
-    if (keyCode >= 48 && keyCode <= 57) {
-        const numero = keyCode - 48;
+    if ((keyCode >= 48 && keyCode <= 57) || (keyCode >= 96 && keyCode <= 105)) {
+        const numero = keyCode >= 96 ? keyCode - 96 : keyCode - 48;
         formarConjuntos(numero.toString());
     }
 
