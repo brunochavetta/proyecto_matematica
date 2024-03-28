@@ -473,7 +473,6 @@ function relacionUsuario() {
 
     for (let k = 0; k < relacionNumeros.length; k++) {
         relacion.push(`(${relacionNumeros[k][0]}, ${relacionNumeros[k][1]})`);
-        console.log(`Relación: ${relacion[k]}`); 
     }
 
     for (let i = 0; i < numConjunto1.length; i++) {
@@ -512,7 +511,7 @@ function relacionUsuario() {
     h5Rel.textContent = `La relación es: ${relacion.join(", ")}`;
     h5Dom.textContent = `El dominio es: ${dominio.join(", ")}`;
     h5Ran.textContent = `El rango es: ${rango.join(", ")}`;
-    h5Tipo.textContent = `Tipo de relación: ${tipoDeRelacion(relacion)}`;
+    h5Tipo.textContent = `Tipo de relación: ${tipoDeRelacion(relacion)} (transitividad en revisión)`;
 
     div.appendChild(conjuntoA);
     div.appendChild(conjuntoB);
@@ -573,7 +572,7 @@ function relaciones() {
     h5Rel.textContent = `La relación es: ${relacion.join(", ")}`;
     h5Dom.textContent = `El dominio es: ${dominio.join(", ")}`;
     h5Ran.textContent = `El rango es: ${rango.join(", ")}`;
-    h5Tipo.textContent = `Tipo de relación: ${tipoDeRelacion(relacion)}`;
+    h5Tipo.textContent = `Tipo de relación: ${tipoDeRelacion(relacion)} (transitividad en revisión)`;
 
     div.appendChild(conjuntoA);
     div.appendChild(conjuntoB);
@@ -606,7 +605,6 @@ function tipoDeRelacion(relacion) {
     // Reflexividad
     for (let i = 0; i < relacion.length; i++) {
         let [x, y] = relacion[i].substring(1, relacion[i].length - 1).split(',').map(e => e.trim());
-        console.log([x, y]); 
         if (x !== y) {
             let elementoReflexivo = `(${x}, ${x})`;
             if (!relacion.includes(elementoReflexivo)) {
@@ -619,9 +617,7 @@ function tipoDeRelacion(relacion) {
     // Simetría
     for (let i = 0; i < relacion.length; i++) {
         let [x, y] = relacion[i].substring(1, relacion[i].length - 1).split(',').map(e => e.trim());
-        console.log([x, y]); 
         let inverso = `(${y}, ${x})`;
-        console.log(inverso); 
         if (!relacion.includes(inverso)) {
             simetrica = false;
             break;
@@ -629,9 +625,9 @@ function tipoDeRelacion(relacion) {
     }
 
     // transitividad
-    transitiva = esTransitiva(relacion, reflexiva);
+    transitiva = esTransitiva(relacion);
 
-    console.log(`Reflexiva: ${reflexiva}, transitiva: ${transitiva}, simetrica: ${simetrica}`); 
+    console.log(`Reflexiva: ${reflexiva}, transitiva: ${transitiva}, simetrica: ${simetrica}`);
 
     // Reflexiva, transitiva, simétrica v 
     // Reflexiva, no transitiva, simetrica v 
@@ -665,32 +661,96 @@ function tipoDeRelacion(relacion) {
 }
 
 
-function esTransitiva(relacion, reflexiva) {
-    let paresPosibles = new Set();
-    let transitiva = false; 
+function esTransitiva(relacion) {
     for (let i = 0; i < relacion.length; i++) {
         let [x1, y1] = relacion[i].substring(1, relacion[i].length - 1).split(',').map(e => e.trim());
+
+        if (x1 === y1){
+            continue; 
+        }
+
+        console.log("a " + [x1, y1]); 
+
         for (let j = 0; j < relacion.length; j++) {
             let [x2, y2] = relacion[j].substring(1, relacion[j].length - 1).split(',').map(e => e.trim());
-                paresPosibles.add(`(${x1}, ${y2})`);
-        }
-    }
 
-    for (let par of paresPosibles) {      
-        let [x, z] = par.substring(1, par.length - 1).split(',').map(e => e.trim());
-        transitiva = false;
-        for (let i = 0; i < relacion.length; i++) {
-            let [x1, y1] = relacion[i].substring(1, relacion[i].length - 1).split(',').map(e => e.trim());
-            if (x === x1) {
-                if (z === y1) {
-                    transitiva = true;
-                    break;
+            if (x2 === y2){
+                continue; 
+            }
+
+            console.log("b " + [x2, y2]); 
+
+            let conexionTransitivaEncontrada = false;
+            console.log(`x1: ${x1}, y1 ${y1}, x2 ${x2}, y2 ${y2}`)
+            if (y1 === x2) {
+                for (let k = 0; k < relacion.length; k++) {
+                    let [x3, y3] = relacion[k].substring(1, relacion[k].length - 1).split(',').map(e => e.trim());
+                    if (x3 === y3){
+                        continue; 
+                    }
+                    console.log("c 1 " + [x3, y3]); 
+                    if ((x3 != x1 && y3 != y2) || (x3 != y2 && y3 != x1)) {
+                        conexionTransitivaEncontrada = true;
+                        break;
+                    }
                 }
+            } else if (y1 === y2) {
+                for (let k = 0; k < relacion.length; k++) {
+                    let [x3, y3] = relacion[k].substring(1, relacion[k].length - 1).split(',').map(e => e.trim());
+                    if (x3 === y3){
+                        continue; 
+                    }
+                    console.log("c 2 " + [x3, y3]); 
+                    if ((x3 != x1 && y3 != x2) || (x3 != x2 && y3 != x1)) {
+                        conexionTransitivaEncontrada = true;
+                        break;
+                    }
+                }
+
+            } else if (x1 === x2) {
+                for (let k = 0; k < relacion.length; k++) {
+                    let [x3, y3] = relacion[k].substring(1, relacion[k].length - 1).split(',').map(e => e.trim());
+                    if (x3 === y3){
+                        continue; 
+                    }
+                    console.log("c 3 " + [x3, y3]); 
+                    if ((x3 != y1 && y3 != y2) || (x3 != y2 && y3 != y1)) {
+                        conexionTransitivaEncontrada = true;
+                        break;
+                    }
+                }
+
+            } else if (x1 === y2) {
+                for (let k = 0; k < relacion.length; k++) {
+                    let [x3, y3] = relacion[k].substring(1, relacion[k].length - 1).split(',').map(e => e.trim());
+                    if (x3 === y3){
+                        continue; 
+                    }
+                    console.log("c 4 " + [x3, y3]); 
+                    if ((x3 != y1 && y3 != x2) || (x3 != x2 && y3 != y1)) {
+                        conexionTransitivaEncontrada = true;
+                        break;
+                    }
+                }
+
+            }else{
+                continue; 
+            }
+
+            if (!conexionTransitivaEncontrada) {
+                return false;
             }
         }
     }
-    return transitiva;
+    return true;
 }
+
+
+
+
+
+
+
 
 function paresOrdenados() {
     limpiarResultado()

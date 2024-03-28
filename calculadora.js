@@ -4,7 +4,7 @@ function averiguarParOrdenado() {
     return esPar.checked
 }
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     let interruptor = document.getElementById("flexSwitchCheckChecked");
     interruptor.checked = false;
 });
@@ -13,6 +13,12 @@ document.addEventListener("DOMContentLoaded", function() {
 document.getElementById("flexSwitchCheckChecked").addEventListener("change", function () {
     if (this.checked) {
         averiguarParOrdenado();
+    } else {
+        let boton = document.getElementById("botonOrdenado");
+        if (boton) {
+            boton.parentNode.removeChild(boton);
+        }
+
     }
 });
 
@@ -37,14 +43,10 @@ function esUltimoCaracterParentesis(cadena) {
 
 function averiguarParOrdenado() {
     const agregarBoton = document.createElement("button");
-    const saltoDeLinea1 = document.createElement("br");
-    const saltoDeLinea2 = document.createElement("br");
 
     agregarBoton.textContent = "Agregar par";
-
+    agregarBoton.id = "botonOrdenado";
     agregarBoton.className = "btn btn-primary";
-    document.getElementById("botonParOrdenado").appendChild(saltoDeLinea1);
-    document.getElementById("botonParOrdenado").appendChild(saltoDeLinea2);
     document.getElementById("botonParOrdenado").appendChild(agregarBoton);
 
     agregarBoton.onclick = function () {
