@@ -473,6 +473,7 @@ function relacionUsuario() {
 
     for (let k = 0; k < relacionNumeros.length; k++) {
         relacion.push(`(${relacionNumeros[k][0]}, ${relacionNumeros[k][1]})`);
+        console.log(`Relación: ${relacion[k]}`); 
     }
 
     for (let i = 0; i < numConjunto1.length; i++) {
@@ -605,6 +606,7 @@ function tipoDeRelacion(relacion) {
     // Reflexividad
     for (let i = 0; i < relacion.length; i++) {
         let [x, y] = relacion[i].substring(1, relacion[i].length - 1).split(',').map(e => e.trim());
+        console.log([x, y]); 
         if (x !== y) {
             let elementoReflexivo = `(${x}, ${x})`;
             if (!relacion.includes(elementoReflexivo)) {
@@ -617,7 +619,9 @@ function tipoDeRelacion(relacion) {
     // Simetría
     for (let i = 0; i < relacion.length; i++) {
         let [x, y] = relacion[i].substring(1, relacion[i].length - 1).split(',').map(e => e.trim());
+        console.log([x, y]); 
         let inverso = `(${y}, ${x})`;
+        console.log(inverso); 
         if (!relacion.includes(inverso)) {
             simetrica = false;
             break;
@@ -625,7 +629,20 @@ function tipoDeRelacion(relacion) {
     }
 
     // transitividad
-    transitiva = esTransitiva(relacion);
+    transitiva = esTransitiva(relacion, reflexiva);
+
+    console.log(`Reflexiva: ${reflexiva}, transitiva: ${transitiva}, simetrica: ${simetrica}`); 
+
+    // Reflexiva, transitiva, simétrica v 
+    // Reflexiva, no transitiva, simetrica v 
+    // No reflexiva, transitiva, simétrica  v 
+    // No reflexiva, no transitiva, simetrica v 
+
+    // Reflexiva, transitiva, no simetrica (antisimetrica) v 
+    // Reflexiva, no transitiva, no simetrica  (antisimetrica) v 
+
+    // No reflexiva, transitiva, asimetrica (no simetrica, no antisimetrica ) v
+    // No reflexiva, no transitiva, asimetrica (no simetrica, no antisimetrica ) v
 
     // tipo de relación
     if (reflexiva && simetrica && transitiva) {
@@ -634,7 +651,7 @@ function tipoDeRelacion(relacion) {
         return "Es reflexiva, transitiva y antisimétrica (RELACIÓN DE ÓRDEN PARCIAL)";
     } if (reflexiva && simetrica && !transitiva) {
         return "Es reflexiva, no transitiva y simétrica";
-    } else if (reflexiva && !simetrica && transitiva) {
+    } else if (reflexiva && !simetrica && !transitiva) {
         return "Es reflexiva, no transitiva y antisimétrica";
     } else if (!reflexiva && simetrica && transitiva) {
         return "Es simétrica, transitiva y no reflexiva";
@@ -648,19 +665,20 @@ function tipoDeRelacion(relacion) {
 }
 
 
-function esTransitiva(relacion) {
+function esTransitiva(relacion, reflexiva) {
     let paresPosibles = new Set();
+    let transitiva = false; 
     for (let i = 0; i < relacion.length; i++) {
         let [x1, y1] = relacion[i].substring(1, relacion[i].length - 1).split(',').map(e => e.trim());
         for (let j = 0; j < relacion.length; j++) {
             let [x2, y2] = relacion[j].substring(1, relacion[j].length - 1).split(',').map(e => e.trim());
-            paresPosibles.add(`(${x1}, ${y2})`);
+                paresPosibles.add(`(${x1}, ${y2})`);
         }
     }
 
-    for (let par of paresPosibles) {
+    for (let par of paresPosibles) {      
         let [x, z] = par.substring(1, par.length - 1).split(',').map(e => e.trim());
-        let transitiva = false;
+        transitiva = false;
         for (let i = 0; i < relacion.length; i++) {
             let [x1, y1] = relacion[i].substring(1, relacion[i].length - 1).split(',').map(e => e.trim());
             if (x === x1) {
@@ -670,11 +688,8 @@ function esTransitiva(relacion) {
                 }
             }
         }
-        if (!transitiva) {
-            return false;
-        }
     }
-    return true;
+    return transitiva;
 }
 
 function paresOrdenados() {
