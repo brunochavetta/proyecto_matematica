@@ -27,7 +27,7 @@ function obtenerNumerosConjunto(conjunto) {
         mostrarMensajeError("Los números del conjunto no fueron ingresados con el formato correspondiente");
         return null;
     }
-    if (conjunto.includes('(') && conjunto.includes(')')) {
+    if (conjunto.includes('(') && conjunto.includes(')')) { //(1, 3)
         let pares = [];
         let regex = /\((-?\d+(\.\d+)?),\s*(-?\d+(\.\d+)?)\)/g;
         let match;
@@ -572,7 +572,7 @@ function relaciones() {
     h5Rel.textContent = `La relación es: ${relacion.join(", ")}`;
     h5Dom.textContent = `El dominio es: ${dominio.join(", ")}`;
     h5Ran.textContent = `El rango es: ${rango.join(", ")}`;
-    h5Tipo.textContent = `Tipo de relación: ${tipoDeRelacion(relacion)} (transitividad en revisión)`;
+    h5Tipo.textContent = `Tipo de relación: ${tipoDeRelacion(relacion, numConjunto1, numConjunto2)} (transitividad en revisión)`;
 
     div.appendChild(conjuntoA);
     div.appendChild(conjuntoB);
@@ -597,17 +597,19 @@ function condicionRelaciones(x, y) {
     }
 };
 
-function tipoDeRelacion(relacion) {
+function tipoDeRelacion(relacion, conjunto1, conjunto2) {
     let reflexiva = true;
     let simetrica = true;
     let transitiva = true;
 
+    let paresOrdenados = devolverParOrdenado(conjunto1, conjunto2); 
+    
     // Reflexividad
-    for (let i = 0; i < relacion.length; i++) {
-        let [x, y] = relacion[i].substring(1, relacion[i].length - 1).split(',').map(e => e.trim());
-        if (x !== y) {
-            let elementoReflexivo = `(${x}, ${x})`;
-            if (!relacion.includes(elementoReflexivo)) {
+    for(let i = 0; i < paresOrdenados.length; i++){
+        for (let j = 0; j < relacion.length; j++) {
+            let [x, y] = relacion[j].substring(1, relacion[j].length - 1).split(',').map(e => e.trim());
+            let elementoReflexivo = `(${x}, ${y})`;
+            if (!paresOrdenados.includes(elementoReflexivo)) {
                 reflexiva = false;
                 break;
             }
@@ -661,7 +663,7 @@ function tipoDeRelacion(relacion) {
 }
 
 
-function esTransitiva(relacion) {
+/*function esTransitiva(relacion) {
     for (let i = 0; i < relacion.length; i++) {
         let [x1, y1] = relacion[i].substring(1, relacion[i].length - 1).split(',').map(e => e.trim());
 
@@ -678,6 +680,10 @@ function esTransitiva(relacion) {
                 continue; 
             }
 
+            if((x2 === x1) && (y2 === y1)){
+                continue; 
+            }
+
             console.log("b " + [x2, y2]); 
 
             let conexionTransitivaEncontrada = false;
@@ -688,8 +694,11 @@ function esTransitiva(relacion) {
                     if (x3 === y3){
                         continue; 
                     }
+                    if(((x2 === x3) && (y2 === y3)) || ((x3 === x1) && (y3 === y1))){
+                        continue; 
+                    }
                     console.log("c 1 " + [x3, y3]); 
-                    if ((x3 != x1 && y3 != y2) || (x3 != y2 && y3 != x1)) {
+                    if ((x3 === x1 && y3 === y2) || (x3 === y2 && y3 === x1)) {
                         conexionTransitivaEncontrada = true;
                         break;
                     }
@@ -700,8 +709,11 @@ function esTransitiva(relacion) {
                     if (x3 === y3){
                         continue; 
                     }
+                    if(((x2 === x3) && (y2 === y3)) || ((x3 === x1) && (y3 === y1))){
+                        continue; 
+                    }
                     console.log("c 2 " + [x3, y3]); 
-                    if ((x3 != x1 && y3 != x2) || (x3 != x2 && y3 != x1)) {
+                    if ((x3 === x1 && y3 === x2) || (x3 === x2 && y3 === x1)) {
                         conexionTransitivaEncontrada = true;
                         break;
                     }
@@ -713,8 +725,11 @@ function esTransitiva(relacion) {
                     if (x3 === y3){
                         continue; 
                     }
+                    if(((x2 === x3) && (y2 === y3)) || ((x3 === x1) && (y3 === y1))){
+                        continue; 
+                    }
                     console.log("c 3 " + [x3, y3]); 
-                    if ((x3 != y1 && y3 != y2) || (x3 != y2 && y3 != y1)) {
+                    if ((x3 === y1 && y3 === y2) || (x3 === y2 && y3 === y1)) {
                         conexionTransitivaEncontrada = true;
                         break;
                     }
@@ -726,8 +741,11 @@ function esTransitiva(relacion) {
                     if (x3 === y3){
                         continue; 
                     }
+                    if(((x2 === x3) && (y2 === y3)) || ((x3 === x1) && (y3 === y1))){
+                        continue; 
+                    }
                     console.log("c 4 " + [x3, y3]); 
-                    if ((x3 != y1 && y3 != x2) || (x3 != x2 && y3 != y1)) {
+                    if ((x3 === y1 && y3 === x2) || (x3 === x2 && y3 === y1)) {
                         conexionTransitivaEncontrada = true;
                         break;
                     }
@@ -743,13 +761,69 @@ function esTransitiva(relacion) {
         }
     }
     return true;
+}*/
+
+
+function esTransitiva(relacion) {
+    // Función para construir el grafo a partir de la relación
+    function construirGrafo(relacion) {
+        const grafo = new Map();
+        for (const [a, b] of relacion) {
+            if (!grafo.has(a)) grafo.set(a, new Set());
+            grafo.get(a).add(b);
+        }
+        return grafo;
+    }
+
+    // Verificar si hay un camino de 'inicio' a 'fin' en el grafo
+    function hayCamino(grafo, inicio, fin) {
+        const visitado = new Set();
+        const porVisitar = [inicio];
+
+        while (porVisitar.length > 0) {
+            const nodo = porVisitar.pop();
+            if (nodo === fin) return true;
+            if (!grafo.has(nodo)) continue;
+
+            for (const vecino of grafo.get(nodo)) {
+                if (!visitado.has(vecino)) {
+                    porVisitar.push(vecino);
+                    visitado.add(vecino);
+                }
+            }
+        }
+        return false;
+    }
+
+    const grafo = construirGrafo(relacion);
+
+    // Verificar la transitividad
+    for (const [a, b] of relacion) {
+        for (const [c, d] of relacion) {
+            // Verificar si hay un camino de b a c
+            if (b === c && !hayCamino(grafo, a, d)) {
+                return false;
+            }
+        }
+    }
+
+    return true;
 }
 
 
+function devolverParOrdenado(numConjunto1, numConjunto2){
+    let pares = [];
 
+    for (let i = 0; i < numConjunto1.length; i++) {
+        for (let j = 0; j < numConjunto2.length; j++) {
+            let x = numConjunto1[i];
+            let y = numConjunto2[j];
+            pares.push(`(${x}, ${y})`);
+        }
+    }; 
 
-
-
+    return pares; 
+}
 
 
 function paresOrdenados() {
@@ -760,24 +834,8 @@ function paresOrdenados() {
     let numConjunto1 = obtenerNumerosConjunto(conjunto1);
     let numConjunto2 = obtenerNumerosConjunto(conjunto2);
 
-    let paresA = [];
-    let paresB = [];
-
-    for (let i = 0; i < numConjunto1.length; i++) {
-        for (let j = 0; j < numConjunto2.length; j++) {
-            let x = numConjunto1[i];
-            let y = numConjunto2[j];
-            paresA.push(`(${x}, ${y})`);
-        }
-    }
-
-    for (let i = 0; i < numConjunto2.length; i++) {
-        for (let j = 0; j < numConjunto1.length; j++) {
-            let x = numConjunto2[i];
-            let y = numConjunto1[j];
-            paresB.push(`(${x}, ${y})`);
-        }
-    }
+    let paresA = devolverParOrdenado(numConjunto1, numConjunto2)
+    let paresB = devolverParOrdenado(numConjunto2, numConjunto1); 
 
     let div = document.getElementById("paresOrdenadosConjunto");
     div.style.display = "block";

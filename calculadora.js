@@ -1,8 +1,8 @@
-function averiguarParOrdenado() {
+/*function averiguarParOrdenado() {
     const esPar = document.getElementById("flexSwitchCheckChecked");
 
     return esPar.checked
-}
+}*/
 
 document.addEventListener("DOMContentLoaded", function () {
     let interruptor = document.getElementById("flexSwitchCheckChecked");
@@ -94,7 +94,6 @@ function agregarAlConjunto(conjuntoID) {
     let par = document.getElementById("parFormado").textContent;
     let conjunto = document.getElementById(conjuntoID);
 
-    console.log
     if (chechSwitch) {
         if (conjunto.value.trim() === '') {
             conjunto.value = par;
