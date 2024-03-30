@@ -511,7 +511,7 @@ function relacionUsuario() {
     h5Rel.textContent = `La relación es: ${relacion.join(", ")}`;
     h5Dom.textContent = `El dominio es: ${dominio.join(", ")}`;
     h5Ran.textContent = `El rango es: ${rango.join(", ")}`;
-    h5Tipo.textContent = `Tipo de relación: ${tipoDeRelacion(relacion)} (transitividad en revisión)`;
+    h5Tipo.textContent =`Tipo de relación: ${tipoDeRelacion(relacion, numConjunto1, numConjunto2)}`;
 
     div.appendChild(conjuntoA);
     div.appendChild(conjuntoB);
@@ -572,7 +572,7 @@ function relaciones() {
     h5Rel.textContent = `La relación es: ${relacion.join(", ")}`;
     h5Dom.textContent = `El dominio es: ${dominio.join(", ")}`;
     h5Ran.textContent = `El rango es: ${rango.join(", ")}`;
-    h5Tipo.textContent = `Tipo de relación: ${tipoDeRelacion(relacion, numConjunto1, numConjunto2)} (transitividad en revisión)`;
+    h5Tipo.textContent = `Tipo de relación: ${tipoDeRelacion(relacion, numConjunto1, numConjunto2)}`;
 
     div.appendChild(conjuntoA);
     div.appendChild(conjuntoB);
@@ -600,9 +600,7 @@ function condicionRelaciones(x, y) {
 function tipoDeRelacion(relacion, conjunto1, conjunto2) {
     let reflexiva = true;
     let simetrica = true;
-    let transitiva = true;
-
-    let paresOrdenados = devolverParOrdenado(conjunto1, conjunto2); 
+    let transitiva = true; 
 
     // Reflexividad
     if(conjunto1.length === conjunto2.length){
@@ -628,20 +626,9 @@ function tipoDeRelacion(relacion, conjunto1, conjunto2) {
     }
 
     // transitividad
-    transitiva = esTransitiva(relacion, paresOrdenados); 
+    transitiva = esTransitivaSegunReglas(relacion); 
 
     console.log(`Reflexiva: ${reflexiva}, transitiva: ${transitiva}, simetrica: ${simetrica}`);
-
-    // Reflexiva, transitiva, simétrica v 
-    // Reflexiva, no transitiva, simetrica v 
-    // No reflexiva, transitiva, simétrica  v 
-    // No reflexiva, no transitiva, simetrica v 
-
-    // Reflexiva, transitiva, no simetrica (antisimetrica) v 
-    // Reflexiva, no transitiva, no simetrica  (antisimetrica) v 
-
-    // No reflexiva, transitiva, asimetrica (no simetrica, no antisimetrica ) v
-    // No reflexiva, no transitiva, asimetrica (no simetrica, no antisimetrica ) v
 
     // tipo de relación
     if (reflexiva && simetrica && transitiva) {
@@ -663,217 +650,132 @@ function tipoDeRelacion(relacion, conjunto1, conjunto2) {
     }
 }
 
-function esTransitiva(relacion, paresOrdenados){
-    let transitiva = true; 
 
-    for(let i = 0; i < paresOrdenados.length; i++){
+function esTransitivaSegunReglas(relacion) {
+    for (let i = 0; i < relacion.length; i++) {
         for (let j = 0; j < relacion.length; j++) {
-            let [a, b] = relacion[j].substring(1, relacion[j].length - 1).split(',').map(e => e.trim()); 
-
-            if(a == b){
-                continue; 
-            }
-
-            for(let k = 0; k < relacion.length; k++){
+            if (i !== j) {
+                let [a, b] = relacion[i].substring(1, relacion[i].length - 1).split(',').map(e => e.trim());
                 let [c, d] = relacion[j].substring(1, relacion[j].length - 1).split(',').map(e => e.trim());
 
-                if(c == d || (c == a && b == d)){
-                    continue; 
+                // aRb y aRc => bRc
+                if (a === c && b !== d) {
+                    let foundTransitive = false;
+                    for (let k = 0; k < relacion.length; k++) {
+                        let [x, y] = relacion[k].substring(1, relacion[k].length - 1).split(',').map(e => e.trim());
+                        if (b === x && d === y) {
+                            foundTransitive = true;
+                            break;
+                        }
+                    }
+                    if (!foundTransitive) {
+                        return false;
+                    }
                 }
-
-                if (a == c){
-                    let elemento1 = `(${b}, ${d})`;
-                    let elemento2 = `(${d}, ${b})`;
-                    console.log(`elemento 1: ${elemento1}`); 
-                    console.log(`elemento 2: ${elemento2}`); 
-                    if(!paresOrdenados.includes(elemento1) || !paresOrdenados.includes(elemento2)){
-                        transitiva = false; 
-                        break;
+                // aRb y aRc => cRb
+                if (a === c && b !== d) {
+                    let foundTransitive = false;
+                    for (let k = 0; k < relacion.length; k++) {
+                        let [x, y] = relacion[k].substring(1, relacion[k].length - 1).split(',').map(e => e.trim());
+                        if (d === x && b === y) {
+                            foundTransitive = true;
+                            break;
+                        }
                     }
-
-                }else if(a == d){
-                    let elemento1 = `(${b}, ${c})`;
-                    let elemento2 = `(${c}, ${b})`;
-                    console.log(`elemento 1: ${elemento1}`); 
-                    console.log(`elemento 2: ${elemento2}`); 
-                    if(!paresOrdenados.includes(elemento1) || !paresOrdenados.includes(elemento2)){
-                        transitiva = false; 
-                        break;
+                    if (!foundTransitive) {
+                        return false;
                     }
-                }else if(b == c){
-                    let elemento1 = `(${a}, ${d})`;
-                    let elemento2 = `(${d}, ${a})`;
-                    console.log(`elemento 1: ${elemento1}`); 
-                    console.log(`elemento 2: ${elemento2}`); 
-                    if(!paresOrdenados.includes(elemento1) || !paresOrdenados.includes(elemento2)){
-                        transitiva = false; 
-                        break;
+                }
+                // aRb y cRa => bRc
+                if (b === c && a !== d) {
+                    let foundTransitive = false;
+                    for (let k = 0; k < relacion.length; k++) {
+                        let [x, y] = relacion[k].substring(1, relacion[k].length - 1).split(',').map(e => e.trim());
+                        if (b === x && d === y) {
+                            foundTransitive = true;
+                            break;
+                        }
                     }
-
-                }else if(b == d){
-                    let elemento1 = `(${a}, ${c})`;
-                    let elemento2 = `(${c}, ${a})`;
-                    console.log(`elemento 1: ${elemento1}`); 
-                    console.log(`elemento 2: ${elemento2}`); 
-                    if(!paresOrdenados.includes(elemento1) || !paresOrdenados.includes(elemento2)){
-                        transitiva = false; 
-                        break;
+                    if (!foundTransitive) {
+                        return false;
                     }
-                }  
+                }
+                // aRb y cRa => cRb
+                if (b === c && a !== d) {
+                    let foundTransitive = false;
+                    for (let k = 0; k < relacion.length; k++) {
+                        let [x, y] = relacion[k].substring(1, relacion[k].length - 1).split(',').map(e => e.trim());
+                        if (d === x && b === y) {
+                            foundTransitive = true;
+                            break;
+                        }
+                    }
+                    if (!foundTransitive) {
+                        return false;
+                    }
+                }
+                // aRb y bRc => aRc
+                if (b === c && a !== d) {
+                    let foundTransitive = false;
+                    for (let k = 0; k < relacion.length; k++) {
+                        let [x, y] = relacion[k].substring(1, relacion[k].length - 1).split(',').map(e => e.trim());
+                        if (a === x && d === y) {
+                            foundTransitive = true;
+                            break;
+                        }
+                    }
+                    if (!foundTransitive) {
+                        return false;
+                    }
+                }
+                // aRb y bRc => cRa
+                if (b === c && a !== d) {
+                    let foundTransitive = false;
+                    for (let k = 0; k < relacion.length; k++) {
+                        let [x, y] = relacion[k].substring(1, relacion[k].length - 1).split(',').map(e => e.trim());
+                        if (d === x && a === y) {
+                            foundTransitive = true;
+                            break;
+                        }
+                    }
+                    if (!foundTransitive) {
+                        return false;
+                    }
+                }
+                // aRb y cRb => aRc
+                if (b === d && a !== c) {
+                    let foundTransitive = false;
+                    for (let k = 0; k < relacion.length; k++) {
+                        let [x, y] = relacion[k].substring(1, relacion[k].length - 1).split(',').map(e => e.trim());
+                        if (a === x && d === y) {
+                            foundTransitive = true;
+                            break;
+                        }
+                    }
+                    if (!foundTransitive) {
+                        return false;
+                    }
+                }
+                // aRb y cRb => cRa
+                if (b === d && a !== c) {
+                    let foundTransitive = false;
+                    for (let k = 0; k < relacion.length; k++) {
+                        let [x, y] = relacion[k].substring(1, relacion[k].length - 1).split(',').map(e => e.trim());
+                        if (c === x && a === y) {
+                            foundTransitive = true;
+                            break;
+                        }
+                    }
+                    if (!foundTransitive) {
+                        return false;
+                    }
+                }
             }
         }
     }
 
-    return transitiva; 
+    return true;
 }
-
-
-/*function esTransitiva(relacion) {
-    for (let i = 0; i < relacion.length; i++) {
-        let [x1, y1] = relacion[i].substring(1, relacion[i].length - 1).split(',').map(e => e.trim());
-
-        if (x1 === y1){
-            continue; 
-        }
-
-        console.log("a " + [x1, y1]); 
-
-        for (let j = 0; j < relacion.length; j++) {
-            let [x2, y2] = relacion[j].substring(1, relacion[j].length - 1).split(',').map(e => e.trim());
-
-            if (x2 === y2){
-                continue; 
-            }
-
-            if((x2 === x1) && (y2 === y1)){
-                continue; 
-            }
-
-            console.log("b " + [x2, y2]); 
-
-            let conexionTransitivaEncontrada = false;
-            console.log(`x1: ${x1}, y1 ${y1}, x2 ${x2}, y2 ${y2}`)
-            if (y1 === x2) {
-                for (let k = 0; k < relacion.length; k++) {
-                    let [x3, y3] = relacion[k].substring(1, relacion[k].length - 1).split(',').map(e => e.trim());
-                    if (x3 === y3){
-                        continue; 
-                    }
-                    if(((x2 === x3) && (y2 === y3)) || ((x3 === x1) && (y3 === y1))){
-                        continue; 
-                    }
-                    console.log("c 1 " + [x3, y3]); 
-                    if ((x3 === x1 && y3 === y2) || (x3 === y2 && y3 === x1)) {
-                        conexionTransitivaEncontrada = true;
-                        break;
-                    }
-                }
-            } else if (y1 === y2) {
-                for (let k = 0; k < relacion.length; k++) {
-                    let [x3, y3] = relacion[k].substring(1, relacion[k].length - 1).split(',').map(e => e.trim());
-                    if (x3 === y3){
-                        continue; 
-                    }
-                    if(((x2 === x3) && (y2 === y3)) || ((x3 === x1) && (y3 === y1))){
-                        continue; 
-                    }
-                    console.log("c 2 " + [x3, y3]); 
-                    if ((x3 === x1 && y3 === x2) || (x3 === x2 && y3 === x1)) {
-                        conexionTransitivaEncontrada = true;
-                        break;
-                    }
-                }
-
-            } else if (x1 === x2) {
-                for (let k = 0; k < relacion.length; k++) {
-                    let [x3, y3] = relacion[k].substring(1, relacion[k].length - 1).split(',').map(e => e.trim());
-                    if (x3 === y3){
-                        continue; 
-                    }
-                    if(((x2 === x3) && (y2 === y3)) || ((x3 === x1) && (y3 === y1))){
-                        continue; 
-                    }
-                    console.log("c 3 " + [x3, y3]); 
-                    if ((x3 === y1 && y3 === y2) || (x3 === y2 && y3 === y1)) {
-                        conexionTransitivaEncontrada = true;
-                        break;
-                    }
-                }
-
-            } else if (x1 === y2) {
-                for (let k = 0; k < relacion.length; k++) {
-                    let [x3, y3] = relacion[k].substring(1, relacion[k].length - 1).split(',').map(e => e.trim());
-                    if (x3 === y3){
-                        continue; 
-                    }
-                    if(((x2 === x3) && (y2 === y3)) || ((x3 === x1) && (y3 === y1))){
-                        continue; 
-                    }
-                    console.log("c 4 " + [x3, y3]); 
-                    if ((x3 === y1 && y3 === x2) || (x3 === x2 && y3 === y1)) {
-                        conexionTransitivaEncontrada = true;
-                        break;
-                    }
-                }
-
-            } else{
-                continue; 
-            }
-
-            if (!conexionTransitivaEncontrada) {
-                return false;
-            }
-        }
-    }
-    return true;
-}*/
-
-
-/*function esTransitiva(relacion) {
-    // Función para construir el grafo a partir de la relación
-    function construirGrafo(relacion) {
-        const grafo = new Map();
-        for (const [a, b] of relacion) {
-            if (!grafo.has(a)) grafo.set(a, new Set());
-            grafo.get(a).add(b);
-        }
-        return grafo;
-    }
-
-    const grafo = construirGrafo(relacion);
-
-    // Verificar si hay un camino de 'inicio' a 'fin' en el grafo
-    function hayCamino(grafo, inicio, fin) {
-        const visitado = new Set();
-        const porVisitar = [inicio];
-
-        while (porVisitar.length > 0) {
-            const nodo = porVisitar.pop();
-            if (nodo === fin) return true;
-            if (!grafo.has(nodo)) continue;
-
-            for (const vecino of grafo.get(nodo)) {
-                if (!visitado.has(vecino)) {
-                    porVisitar.push(vecino);
-                    visitado.add(vecino);
-                }
-            }
-        }
-        return false;
-    }
-
-    // Verificar la transitividad
-    for (const [a, b] of relacion) {
-        for (const [c, d] of relacion) {
-            // Verificar si hay un camino de b a c
-            if (b === c && !hayCamino(grafo, a, d)) {
-                return false;
-            }
-        }
-    }
-
-    return true;
-}*/
 
 
 function devolverParOrdenado(numConjunto1, numConjunto2){
