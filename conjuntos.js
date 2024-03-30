@@ -603,17 +603,18 @@ function tipoDeRelacion(relacion, conjunto1, conjunto2) {
     let transitiva = true;
 
     let paresOrdenados = devolverParOrdenado(conjunto1, conjunto2); 
-    
+
     // Reflexividad
-    for(let i = 0; i < paresOrdenados.length; i++){
-        for (let j = 0; j < relacion.length; j++) {
-            let [x, y] = relacion[j].substring(1, relacion[j].length - 1).split(',').map(e => e.trim());
-            let elementoReflexivo = `(${x}, ${y})`;
-            if (!paresOrdenados.includes(elementoReflexivo)) {
-                reflexiva = false;
-                break;
+    if(conjunto1.length === conjunto2.length){
+        for(let i = 0; i < conjunto1.length; i++){
+            let elemento =  `(${conjunto1[i]}, ${conjunto2[i]})`;
+            if(!relacion.includes(elemento)){
+                reflexiva = false; 
+                break; 
             }
         }
+    }else{
+        reflexiva = false; 
     }
 
     // Simetría
@@ -627,7 +628,7 @@ function tipoDeRelacion(relacion, conjunto1, conjunto2) {
     }
 
     // transitividad
-    transitiva = esTransitiva(relacion);
+    transitiva = esTransitiva(relacion, paresOrdenados); 
 
     console.log(`Reflexiva: ${reflexiva}, transitiva: ${transitiva}, simetrica: ${simetrica}`);
 
@@ -660,6 +661,70 @@ function tipoDeRelacion(relacion, conjunto1, conjunto2) {
     } else if (!reflexiva && !simetrica && !transitiva) {
         return "Es asimétrica, no transitiva y no reflexiva";
     }
+}
+
+function esTransitiva(relacion, paresOrdenados){
+    let transitiva = true; 
+
+    for(let i = 0; i < paresOrdenados.length; i++){
+        for (let j = 0; j < relacion.length; j++) {
+            let [a, b] = relacion[j].substring(1, relacion[j].length - 1).split(',').map(e => e.trim()); 
+
+            if(a == b){
+                continue; 
+            }
+
+            for(let k = 0; k < relacion.length; k++){
+                let [c, d] = relacion[j].substring(1, relacion[j].length - 1).split(',').map(e => e.trim());
+
+                if(c == d || (c == a && b == d)){
+                    continue; 
+                }
+
+                if (a == c){
+                    let elemento1 = `(${b}, ${d})`;
+                    let elemento2 = `(${d}, ${b})`;
+                    console.log(`elemento 1: ${elemento1}`); 
+                    console.log(`elemento 2: ${elemento2}`); 
+                    if(!paresOrdenados.includes(elemento1) || !paresOrdenados.includes(elemento2)){
+                        transitiva = false; 
+                        break;
+                    }
+
+                }else if(a == d){
+                    let elemento1 = `(${b}, ${c})`;
+                    let elemento2 = `(${c}, ${b})`;
+                    console.log(`elemento 1: ${elemento1}`); 
+                    console.log(`elemento 2: ${elemento2}`); 
+                    if(!paresOrdenados.includes(elemento1) || !paresOrdenados.includes(elemento2)){
+                        transitiva = false; 
+                        break;
+                    }
+                }else if(b == c){
+                    let elemento1 = `(${a}, ${d})`;
+                    let elemento2 = `(${d}, ${a})`;
+                    console.log(`elemento 1: ${elemento1}`); 
+                    console.log(`elemento 2: ${elemento2}`); 
+                    if(!paresOrdenados.includes(elemento1) || !paresOrdenados.includes(elemento2)){
+                        transitiva = false; 
+                        break;
+                    }
+
+                }else if(b == d){
+                    let elemento1 = `(${a}, ${c})`;
+                    let elemento2 = `(${c}, ${a})`;
+                    console.log(`elemento 1: ${elemento1}`); 
+                    console.log(`elemento 2: ${elemento2}`); 
+                    if(!paresOrdenados.includes(elemento1) || !paresOrdenados.includes(elemento2)){
+                        transitiva = false; 
+                        break;
+                    }
+                }  
+            }
+        }
+    }
+
+    return transitiva; 
 }
 
 
@@ -751,7 +816,7 @@ function tipoDeRelacion(relacion, conjunto1, conjunto2) {
                     }
                 }
 
-            }else{
+            } else{
                 continue; 
             }
 
@@ -764,7 +829,7 @@ function tipoDeRelacion(relacion, conjunto1, conjunto2) {
 }*/
 
 
-function esTransitiva(relacion) {
+/*function esTransitiva(relacion) {
     // Función para construir el grafo a partir de la relación
     function construirGrafo(relacion) {
         const grafo = new Map();
@@ -774,6 +839,8 @@ function esTransitiva(relacion) {
         }
         return grafo;
     }
+
+    const grafo = construirGrafo(relacion);
 
     // Verificar si hay un camino de 'inicio' a 'fin' en el grafo
     function hayCamino(grafo, inicio, fin) {
@@ -795,8 +862,6 @@ function esTransitiva(relacion) {
         return false;
     }
 
-    const grafo = construirGrafo(relacion);
-
     // Verificar la transitividad
     for (const [a, b] of relacion) {
         for (const [c, d] of relacion) {
@@ -808,7 +873,7 @@ function esTransitiva(relacion) {
     }
 
     return true;
-}
+}*/
 
 
 function devolverParOrdenado(numConjunto1, numConjunto2){
