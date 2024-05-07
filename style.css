@@ -10,9 +10,6 @@
     z-index: -1; 
 }
 
-#resultado{
-    color: white; 
-}
 
 #botonFlotante {
     position: fixed;
@@ -20,3 +17,128 @@
     right: 20px; 
     z-index: 1000; 
 }
+
+.fraction {
+    display: inline-block;
+    vertical-align: middle;
+    text-align: center;
+}
+.fraction .numerator {
+    display: block;
+    border-bottom: 1px solid;
+}
+.fraction .denominator {
+    border-top: 1px solid;
+}
+
+
+/* General Body Styles */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    line-height: 1.6;
+    padding: 20px;
+  }
+  
+  /* Container */
+  .container {
+    max-width: 1100px;
+    margin: auto;
+    overflow: hidden;
+    padding: 0 20px;
+  }
+  
+  /* Navbar */
+  .navbar {
+    background: #005a87;
+    color: #ffffff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+  }
+  
+  .navbar a {
+    color: #ffffff;
+    text-decoration: none;
+  }
+  
+  /* Buttons */
+  .btn {
+    display: inline-block;
+    background: #333;
+    color: #fff;
+    padding: 10px 20px;
+    margin: 5px;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .btn-primary {
+    background: #007bff;
+  }
+  
+  .btn-danger {
+    background: #dc3545;
+  }
+  
+  .btn-light {
+    background: #f8f9fa;
+    color: #555;
+  }
+  
+  .btn-outline-secondary {
+    background: transparent;
+    color: #6c757d;
+    border: 1px solid #6c757d;
+  }
+  
+  .btn:hover {
+    opacity: 0.9;
+  }
+  
+  /* Card */
+  .card {
+    background: #fff;
+    margin-bottom: 20px;
+    padding: 20px;
+    -webkit-box-shadow: 0 0 10px #ccc;
+            box-shadow: 0 0 10px #ccc;
+  }
+  
+  .card-header, .card-body {
+    padding: 2em;
+  }
+  
+  /* Input Forms */
+  input[type=text], .form-control {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0 22px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  
+  input[type=text]:focus, .form-control:focus {
+    border-color: #007bff;
+  }
+  
+  /* Misc */
+  .fondo {
+    /* Puedes definir un color de fondo o una imagen */
+  }
+  
+  .botonFlotante {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+  }
+  
+ .mostrarResultado{
+    background-color: #fff9f9;
+    color: black;
+ }
+  

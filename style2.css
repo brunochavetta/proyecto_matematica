@@ -1,0 +1,87 @@
+.kbContainer {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .kbRow {
+    display: flex;
+  }
+  
+  .kbKeyContainer {
+    flex-grow: 1;
+    text-align: center;
+  }
+  
+  .kbKey {
+    display: inline-block;
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    text-align: center;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    transition: background-color 0.3s ease;
+  }
+  
+  .kbKey:hover {
+    background-color: #e0e0e0;
+  }
+  
+  .kbAltKey {
+    display: inline-block;
+    width: 50%;
+    padding: 10px;
+    font-size: 16px;
+    text-align: center;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    transition: background-color 0.3s ease;
+  }
+  
+  .kbAltKey:hover {
+    background-color: #e0e0e0;
+  }
+  
+  .kbKeySecondary {
+    display: none;
+  }
+  
+  .kbKey:hover .kbKeySecondary {
+    display: inline-block;
+  }
+  
+  .kbFirst {
+    border-radius: 5px 0 0 5px;
+  }
+  
+  .kbLast {
+    border-radius: 0 5px 5px 0;
+  }
+  
+  .kbAltFirst {
+    border-radius: 5px 0 0 0;
+  }
+  
+  .kbAltLast {
+    border-radius: 0 5px 0 0;
+  }
+  
+  .kbDark {
+    background-color: #333;
+    color: #fff;
+  }
+  
+  .kbDark:hover {
+    background-color: #666;
+  }
+  
+  .kbLight {
+    background-color: #f9f9f9;
+  }
+  
+  .kbLight:hover {
+    background-color: #e0e0e0;
+  }
+  

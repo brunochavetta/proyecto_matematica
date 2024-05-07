@@ -16,6 +16,7 @@
     <button id="botonFlotante" class="btn btn-light rounded-pill px-3" type="button">Resultado ↓</button>
 
 
+
     <div class="container">
         <nav class="navbar bg-dark border-bottom border-body navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
             <div class="container-fluid">
@@ -42,144 +43,162 @@
 
         </nav>
 
-        <div class="card mx-auto text-center my-5" style="width: 25rem; text-align: center;">
-            <div class="card-header">
-                Cargar conjuntos
-            </div>
-            <div class="card-body">
-                <div class="bd-example m-0 border-0">
-                    <div class="mb-3">
-                        <div id="conjuntoA">
-                            <label for="conjunto1" class="form-label">Conjunto A:</label>
-                            <input type="text" name="conjunto1" id="conjunto1" class="form-control conjuntoFormado">
+        <div class="container" style="align-items: center;">
+            <div class="row justify-content-center">
+                <!-- Columna de la calculadora -->
+                <div class="col-lg-4">
+                    <div class="card text-center mt-5">
+                        <div class="card-header">
+                            Calculadora de Conjuntos
                         </div>
-                        <div id="conjuntoB">
-                            <label for="conjunto2" class="form-label">Conjunto B:</label>
-                            <input type="text" name="conjunto2" id="conjunto2" class="form-control conjuntoFormado">
+                        <div class="card-body">
+                            <div class="bd-example m-0 border-0">
+                                <div class="mb-3">
+                                    <div id="conjuntoA">
+                                        <label for="conjunto1" class="form-label">Conjunto A:</label>
+                                        <input type="text" name="conjunto1" id="conjunto1" class="form-control conjuntoFormado">
+                                    </div>
+                                    <div id="conjuntoB">
+                                        <label for="conjunto2" class="form-label">Conjunto B:</label>
+                                        <input type="text" name="conjunto2" id="conjunto2" class="form-control conjuntoFormado">
+                                    </div>
+                                </div>
+    
+                                <div class="form-check form-switch d-flex align-items-center justify-content-end">
+                                    <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked"
+                                        checked="false">
+                                    <label class="form-check-label ms-2" for="flexSwitchCheckChecked">Pares ordenados</label>
+                                </div>
+            
+                                <p id="parFormado"></p>
+                                <p id="numeroConjunto"></p>
+                                <div id="botonesNumeros">
+                                    <button type="button" id="0"
+                                        class="btn-calculadora btn btn-outline-secondary d-inline-flex align-items-center"
+                                        onclick="formarConjuntos('0')">0</button>
+                                    <button type="button" id="1"
+                                        class="btn-calculadora btn btn-outline-secondary d-inline-flex align-items-center"
+                                        onclick="formarConjuntos('1')">1</button>
+                                    <button type="button" id="2"
+                                        class="btn-calculadora btn btn-outline-secondary d-inline-flex align-items-center"
+                                        onclick="formarConjuntos('2')">2</button>
+                                    <button type="button" id="3"
+                                        class="btn-calculadora btn btn-outline-secondary d-inline-flex align-items-center"
+                                        onclick="formarConjuntos('3')">3</button>
+                                    <button type="button" id="4"
+                                        class="btn-calculadora btn btn-outline-secondary d-inline-flex align-items-center"
+                                        onclick="formarConjuntos('4')">4</button> <br>
+                                    <button type="button" id="5"
+                                        class="btn-calculadora btn btn-outline-secondary d-inline-flex align-items-center"
+                                        onclick="formarConjuntos('5')">5</button>
+                                    <button type="button" id="6"
+                                        class="btn-calculadora btn btn-outline-secondary d-inline-flex align-items-center"
+                                        onclick="formarConjuntos('6')">6</button>
+                                    <button type="button" id="7"
+                                        class="btn-calculadora btn btn-outline-secondary d-inline-flex align-items-center"
+                                        onclick="formarConjuntos('7')">7</button>
+                                    <button type="button" id="8"
+                                        class="btn-calculadora btn btn-outline-secondary d-inline-flex align-items-center"
+                                        onclick="formarConjuntos('8')">8</button>
+                                    <button type="button" id="9"
+                                        class="btn-calculadora btn btn-outline-secondary d-inline-flex align-items-center"
+                                        onclick="formarConjuntos('9')">9</button>
+                                </div>
+            
+            
+            
+                                <button type="button" class="btn btn-outline-secondary d-inline-flex align-items-center"
+                                    onclick="limpiar()">Limpiar</button>
+                                <button type="button" class="btn btn-outline-secondary d-inline-flex align-items-center"
+                                    onclick="borrar()">⌫</button> <br> <br>
+                                <button type="button" class="btn btn-primary" onclick="agregarAlConjunto('conjunto1')">Agregar
+                                    número a A</button>
+                                <button type="button" class="btn btn-primary" onclick="agregarAlConjunto('conjunto2')">Agregar
+                                    número a B</button>
+                                <br><br>
+                                <div id="botonParOrdenado" style="display: inline;"></div>
+                            </div>
                         </div>
                     </div>
-
-                    <div class="form-check form-switch d-flex align-items-center justify-content-end">
-                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked"
-                            checked="false">
-                        <label class="form-check-label ms-2" for="flexSwitchCheckChecked">Pares ordenados</label>
+                </div>
+                <!-- Columna de las opciones de cálculo -->
+                <div class="col-lg-4" id="acciones">
+                    <div class="card text-center mt-5">
+                        <div class="card-header">
+                            Opciones de Cálculo
+                        </div>
+                        <div class="card-body">
+                            <div class="d-grid gap-2">
+                                <button class="btn btn-outline-primary " type="button" onclick="subconjuntos()">Subconjunto</button>
+                            <br>
+                            <button class="btn btn-outline-primary " type="button" onclick="conjuntoPotencia()">Conjunto
+                                potencia</button> <br>
+                            <button class="btn btn-outline-primary " type="button" onclick="union()">Union</button> <br>
+                            <button class="btn btn-outline-primary " type="button" onclick="interseccion()">Interseccion</button>
+                            <br>
+                            <button class="btn btn-outline-primary " type="button" onclick="difSimetrica()">Diferencia
+                                simétrica</button> <br>
+                            <button class="btn btn-outline-primary " type="button" onclick="diferencia()">Diferencia</button>
+                            <br>
+                            <button class="btn btn-outline-primary " type="button" onclick="paresOrdenados()">Pares
+                                ordenados</button> <br>
+                            <button class="btn btn-outline-primary " type="button" onclick="averiguarCantParticiones()">Calcular
+                                particiones</button> <br>
+                            <input type="text" name="condicion" id="condicion" class="form-control"
+                                placeholder="Ingrese la condición con las letras x - y">
+                            <button class="btn btn-outline-primary " onclick="relaciones()">Evaluar Relaciones</button> <br>
+                            <input type="text" name="relacion" id="relacionUsuarioID"
+                                placeholder="Ingrese la relación con el formato '(num, num), (num, num)...'" class="form-control"
+                                placeholder="Disabled input">
+                            <button class="btn btn-outline-primary " onclick="relacionUsuario()">Enviar relación</button>
+                            </div>
+                            
+                        </div>
                     </div>
-
-                    <p id="parFormado"></p>
-                    <p id="numeroConjunto"></p>
-                    <div id="botonesNumeros">
-                        <button type="button" id="0"
-                            class="btn-calculadora btn btn-outline-secondary d-inline-flex align-items-center"
-                            onclick="formarConjuntos('0')">0</button>
-                        <button type="button" id="1"
-                            class="btn-calculadora btn btn-outline-secondary d-inline-flex align-items-center"
-                            onclick="formarConjuntos('1')">1</button>
-                        <button type="button" id="2"
-                            class="btn-calculadora btn btn-outline-secondary d-inline-flex align-items-center"
-                            onclick="formarConjuntos('2')">2</button>
-                        <button type="button" id="3"
-                            class="btn-calculadora btn btn-outline-secondary d-inline-flex align-items-center"
-                            onclick="formarConjuntos('3')">3</button>
-                        <button type="button" id="4"
-                            class="btn-calculadora btn btn-outline-secondary d-inline-flex align-items-center"
-                            onclick="formarConjuntos('4')">4</button> <br>
-                        <button type="button" id="5"
-                            class="btn-calculadora btn btn-outline-secondary d-inline-flex align-items-center"
-                            onclick="formarConjuntos('5')">5</button>
-                        <button type="button" id="6"
-                            class="btn-calculadora btn btn-outline-secondary d-inline-flex align-items-center"
-                            onclick="formarConjuntos('6')">6</button>
-                        <button type="button" id="7"
-                            class="btn-calculadora btn btn-outline-secondary d-inline-flex align-items-center"
-                            onclick="formarConjuntos('7')">7</button>
-                        <button type="button" id="8"
-                            class="btn-calculadora btn btn-outline-secondary d-inline-flex align-items-center"
-                            onclick="formarConjuntos('8')">8</button>
-                        <button type="button" id="9"
-                            class="btn-calculadora btn btn-outline-secondary d-inline-flex align-items-center"
-                            onclick="formarConjuntos('9')">9</button>
-                    </div>
-
-
-
-                    <button type="button" class="btn btn-outline-secondary d-inline-flex align-items-center"
-                        onclick="limpiar()">Limpiar</button>
-                    <button type="button" class="btn btn-outline-secondary d-inline-flex align-items-center"
-                        onclick="borrar()">⌫</button> <br> <br>
-                    <button type="button" class="btn btn-primary" onclick="agregarAlConjunto('conjunto1')">Agregar
-                        número a A</button>
-                    <button type="button" class="btn btn-primary" onclick="agregarAlConjunto('conjunto2')">Agregar
-                        número a B</button>
-                    <br><br>
-                    <div id="botonParOrdenado" style="display: inline;"></div>
                 </div>
             </div>
         </div>
 
-
-        <div id="acciones">
-            <div class="d-grid gap-2 col-6 mx-auto">
-                <button class="btn btn-primary btn-danger " type="button" onclick="subconjuntos()">Subconjunto</button>
-                <br>
-                <button class="btn btn-primary btn-danger " type="button" onclick="conjuntoPotencia()">Conjunto
-                    potencia</button> <br>
-                <button class="btn btn-primary btn-danger " type="button" onclick="union()">Union</button> <br>
-                <button class="btn btn-primary btn-danger " type="button" onclick="interseccion()">Interseccion</button>
-                <br>
-                <button class="btn btn-primary btn-danger " type="button" onclick="difSimetrica()">Diferencia
-                    simétrica</button> <br>
-                <button class="btn btn-primary btn-danger " type="button" onclick="diferencia()">Diferencia</button>
-                <br>
-                <button class="btn btn-primary btn-danger " type="button" onclick="paresOrdenados()">Pares
-                    ordenados</button> <br>
-                <button class="btn btn-primary btn-danger " type="button" onclick="averiguarCantParticiones()">Calcular
-                    particiones</button> <br>
-                <input type="text" name="condicion" id="condicion" class="form-control"
-                    placeholder="Ingrese la condición con las letras x - y">
-                <button class="btn btn-primary btn-danger " onclick="relaciones()">Evaluar Relaciones</button> <br>
-                <input type="text" name="relacion" id="relacionUsuarioID"
-                    placeholder="Ingrese la relación con el formato '(num, num), (num, num)...'" class="form-control"
-                    placeholder="Disabled input">
-                <button class="btn btn-primary btn-danger " onclick="relacionUsuario()">Enviar relación</button>
-            </div>
-        </div>
+        
 
         <br><br>
-        <div id="resultado">
-            <div id="subconjuntosC" style="display: none;">
-                <h3>Subconjuntos</h3>
+        <div class="mostrarResultado" style="height: auto;">
+            <div id="resultado">
+                <div id="subconjuntosC" style="display: none;">
+                    <h3>Subconjuntos</h3>
+                </div>
+                <div id="conjuntosPotencia" style="display: none;">
+                    <h3>Conjunto potencia</h3>
+                </div>
+                <div id="unionConjuntos" style="display: none;">
+                    <h3>union de conjuntos</h3>
+                </div>
+                <div id="interseccionConjuntos" style="display: none;">
+                    <h3>Intersección de conjuntos</h3>
+                </div>
+                <canvas id="vennCanvas" width="400" height="300"
+                    style="display: none; background-color: rgba(255, 247, 236, 0.712);"></canvas>
+                <div id="diferenciaConjuntos" style="display: none;">
+                    <h3>Diferencia de conjuntos</h3>
+                </div>
+                <div id="difSimetricaConjunto" style="display: none;">
+                    <h3>Diferencia simétrica de conjuntos</h3>
+                </div>
+                <div id="paresOrdenadosConjunto" style="display: none;">
+                    <h3>Pares ordenados de conjuntos</h3>
+                </div>
+                <div id="calculo" style="display: none;">
+                    <h3>Particiones de un conjunto</h3>
+                </div>
+                <div id="contenedorRelacionUsuario" style="display: none;">
+                    <h3>Relación ingresada por el usuario</h3>
+                </div>
+                <div id="contenedorRelacion" style="display: none;">
+                    <h3>Relación según condición</h3>
+                </div>
+                <canvas id="matrizConjuntos" width="400" height="300"
+                    style="display: none; background-color: rgba(255, 247, 236, 0.712);"></canvas>
             </div>
-            <div id="conjuntosPotencia" style="display: none;">
-                <h3>Conjunto potencia</h3>
-            </div>
-            <div id="unionConjuntos" style="display: none;">
-                <h3>union de conjuntos</h3>
-            </div>
-            <div id="interseccionConjuntos" style="display: none;">
-                <h3>Intersección de conjuntos</h3>
-            </div>
-            <canvas id="vennCanvas" width="400" height="300"
-                style="display: none; background-color: rgba(255, 247, 236, 0.712);"></canvas>
-            <div id="diferenciaConjuntos" style="display: none;">
-                <h3>Diferencia de conjuntos</h3>
-            </div>
-            <div id="difSimetricaConjunto" style="display: none;">
-                <h3>Diferencia simétrica de conjuntos</h3>
-            </div>
-            <div id="paresOrdenadosConjunto" style="display: none;">
-                <h3>Pares ordenados de conjuntos</h3>
-            </div>
-            <div id="calculo" style="display: none;">
-                <h3>Particiones de un conjunto</h3>
-            </div>
-            <div id="contenedorRelacionUsuario" style="display: none;">
-                <h3>Relación ingresada por el usuario</h3>
-            </div>
-            <div id="contenedorRelacion" style="display: none;">
-                <h3>Relación según condición</h3>
-            </div>
-            <canvas id="matrizConjuntos" width="400" height="300"
-                style="display: none; background-color: rgba(255, 247, 236, 0.712);"></canvas>
         </div>
 
     </div>
